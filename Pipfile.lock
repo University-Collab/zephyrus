@@ -1,0 +1,60 @@
+{
+    "_meta": {
+        "hash": {
+            "sha256": "23960e61c046591f98eca9c51820d920dee3ec58503364cb349e7b9245a5d418"
+        },
+        "pipfile-spec": 6,
+        "requires": {
+            "python_version": "3.7"
+        },
+        "sources": [
+            {
+                "name": "pypi",
+                "url": "https://pypi.python.org/simple",
+                "verify_ssl": true
+            }
+        ]
+    },
+    "default": {
+        "mysql": {
+            "hashes": [
+                "sha256:55e66b5e7b3823b1da5fb2a063e95a628fb850b2a0b76bdcd884faac5d2daa7d"
+            ],
+            "index": "pypi",
+            "version": "==0.0.2"
+        },
+        "mysqlclient": {
+            "hashes": [
+                "sha256:4c82187dd6ab3607150fbb1fa5ef4643118f3da122b8ba31c3149ddd9cf0cb39",
+                "sha256:9e6080a7aee4cc6a06b58b59239f20f1d259c1d2fddf68ddeed242d2311c7087",
+                "sha256:f3fdaa9a38752a3b214a6fe79d7cae3653731a53e577821f9187e67cbecb2e16",
+                "sha256:f646f8d17d02be0872291f258cce3813497bc7888cd4712a577fd1e719b2f213"
+            ],
+            "version": "==1.4.6"
+        },
+        "pyside2": {
+            "hashes": [
+                "sha256:36cfcbcab02b580d51c710b3014ee91e5b88f518e296b9a3784f331525450cac",
+                "sha256:5b0cf7f0a9cb8fb11881b8615c7d979f5d02bdab6c3f428bf40956537c87071c",
+                "sha256:a6e6f7862c3232c755285eb8b2769f34ebdd678576a63ad3a63f52e60af67147",
+                "sha256:a9918f00ad7dbe96342dd82de503e927006f3049c76fb708a0e9106b62fa26b2",
+                "sha256:e1a03c1f98665b513f5b339d19dbe5e3b9df441e89adf52871f2fd708b9fee08",
+                "sha256:e2f5d41b8b306ab42d90c430f731eaf1f5de85beb8483ca84bc29f33620dcbb0"
+            ],
+            "index": "pypi",
+            "version": "==5.14.1"
+        },
+        "shiboken2": {
+            "hashes": [
+                "sha256:124b1d8dd6ea67138f08086343a4631c4ebd9f461bb8cb0c04d812ad15d03b36",
+                "sha256:90a3361c64b56a2029ebf7f09bdc0c7cad4d2a3020700a1dce725db8a334703c",
+                "sha256:b046f810f2409b734621972ee6bff1eac76e87f08ab0638010d99a1b79f72842",
+                "sha256:bf47fabc87356e49f74152baece11777b0e176edfc0665bf13a7f199d83c94b6",
+                "sha256:da8ee5fc65e41b542bf50eec2db57e707255d09c460cce62c0ff12a63e3bd2c6",
+                "sha256:f6f119353d4861dee3f28962a80830ca3bf68509f0c89a9d779cd3cb90702091"
+            ],
+            "version": "==5.14.1"
+        }
+    },
+    "develop": {}
+}

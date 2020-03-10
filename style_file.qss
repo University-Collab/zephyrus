@@ -3,6 +3,7 @@ QMenuBar {
     color: white;
     spacing: 3px;
 }
+
 QMenuBar::item {
     padding: 5px 4px;
     background: transparent;
@@ -14,5 +15,5 @@ QMenuBar::item:selected { /* when selected using mouse or keyboard */
 }
 
 QMenuBar::item:pressed {
-    /* ako budes hteo nesto na klik */
+    /* for on-click events */
 }

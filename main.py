@@ -7,13 +7,11 @@ class MainWindow(QMainWindow):
         QMainWindow.__init__(self)
         self.setWindowTitle("Information Handler")
 
-        # za qss file
-        with open('style_file.qss', 'r') as qss_file:
+        with open("style_file.qss", "r") as qss_file:
             self.setStyleSheet(qss_file.read())
-        
 
         self.menu = self.menuBar()
-    
+
         self.file_menu = self.menu.addMenu("File")
         self.edit_menu = self.menu.addMenu("Edit")
         self.tools_menu = self.menu.addMenu("Tools")

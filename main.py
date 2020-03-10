@@ -5,7 +5,7 @@ from PySide2.QtWidgets import QApplication, QMainWindow
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
-        self.setWindowTitle("Information Handler")
+        self.setWindowTitle("Zephyrus - Information Handler")
 
         with open("style_file.qss", "r") as qss_file:
             self.setStyleSheet(qss_file.read())

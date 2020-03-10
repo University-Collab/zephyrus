@@ -1,0 +1,18 @@
+QMenuBar {
+    background-color: #272727;
+    color: white;
+    spacing: 3px;
+}
+QMenuBar::item {
+    padding: 5px 4px;
+    background: transparent;
+    border-radius: 0;
+}
+
+QMenuBar::item:selected { /* when selected using mouse or keyboard */
+    background: #404040;
+}
+
+QMenuBar::item:pressed {
+    /* ako budes hteo nesto na klik */
+}

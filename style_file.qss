@@ -25,4 +25,19 @@ QMenuBar::item:pressed {
 QToolBar {
     background-color: #1a1a1a;
     min-width: 50px;
+    spacing: 3px;
+}
+
+QToolButton {
+    margin-top: 5px;
+    width: 3em;
+}
+
+QToolButton:hover {
+    background-color: #404040;
+    min-width: 50px;
+}
+
+QToolButton:pressed {
+    background-color: #212121;
 }

@@ -1,5 +1,5 @@
 QMenuBar {
-    background-color: #272727;
+    background-color: #1a1a1a;
     color: white;
     spacing: 3px;
 }
@@ -16,4 +16,9 @@ QMenuBar::item:selected { /* when selected using mouse or keyboard */
 
 QMenuBar::item:pressed {
     /* for on-click events */
+}
+
+QToolBar {
+    background-color: #1a1a1a;
+    min-width: 50px;
 }

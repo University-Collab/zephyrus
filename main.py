@@ -1,5 +1,8 @@
 import sys
 from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtGui import Qt
+
+from toolbar.toolbar import Toolbar
 
 
 class MainWindow(QMainWindow):
@@ -24,6 +27,10 @@ if __name__ == "__main__":
 
     window = MainWindow()
     window.resize(800, 600)
+
+    toolbar = Toolbar("Hello world", window)
+    window.addToolBar(Qt.LeftToolBarArea, toolbar)
+
     window.show()
 
     sys.exit(app.exec_())

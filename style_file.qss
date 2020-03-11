@@ -31,6 +31,7 @@ QToolBar {
 QToolButton {
     margin-top: 5px;
     width: 3em;
+    border-radius: 0;
 }
 
 QToolButton:hover {

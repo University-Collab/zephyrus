@@ -1,8 +1,13 @@
+QMainWindow {
+    background-color: #212121;
+}
+
 QMenuBar {
-    background-color: #272727;
+    background-color: #1a1a1a;
     color: white;
     spacing: 3px;
 }
+
 QMenuBar::item {
     padding: 5px 4px;
     background: transparent;
@@ -14,5 +19,26 @@ QMenuBar::item:selected { /* when selected using mouse or keyboard */
 }
 
 QMenuBar::item:pressed {
-    /* ako budes hteo nesto na klik */
+    /* for on-click events */
+}
+
+QToolBar {
+    background-color: #1a1a1a;
+    min-width: 50px;
+    spacing: 3px;
+}
+
+QToolButton {
+    margin-top: 5px;
+    width: 3em;
+    border-radius: 0;
+}
+
+QToolButton:hover {
+    background-color: #404040;
+    min-width: 50px;
+}
+
+QToolButton:pressed {
+    background-color: #212121;
 }

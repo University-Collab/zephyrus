@@ -1,4 +1,4 @@
-## Zephyrus
+![Zephyrus Cover](./images/logo/cover.png)
 
 Information Handler
 

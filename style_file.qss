@@ -35,11 +35,16 @@ QToolButton {
 }
 
 QToolButton:hover {
-    background-color: #404040;
+    background-color: rgba(64,64,64, 0.3);
     min-width: 50px;
-    border-left: 3px solid #1C6EA4;
+    border-left: 3px solid #eeffff;
 }
 
 QToolButton:pressed {
     background-color: #212121;
+}
+
+QStatusBar {
+    color: #7b7b7b;
+    background-color: #1a1a1a;
 }

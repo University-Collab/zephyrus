@@ -5,7 +5,9 @@ from PySide2.QtGui import QIcon
 class Toolbar(QToolBar):
     def __init__(self, title=None, parent=None):
         QToolBar.__init__(self, title, parent)
+        self.init_toolbar_buttons()
 
+    def init_toolbar_buttons(self):
         self.create_new = QToolButton(self)
         self.create_new.setIcon(QIcon("images/toolbar/create_new.png"))
         self.addWidget(self.create_new)

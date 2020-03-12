@@ -3,6 +3,7 @@ from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtGui import Qt
 
 from toolbar.toolbar import Toolbar
+from status_bar.status_bar import StatusBar
 
 
 class MainWindow(QMainWindow):
@@ -28,8 +29,11 @@ if __name__ == "__main__":
     window = MainWindow()
     window.resize(800, 600)
 
-    toolbar = Toolbar("Hello world", window)
+    toolbar = Toolbar(window)
     window.addToolBar(Qt.LeftToolBarArea, toolbar)
+
+    status_bar = StatusBar(window)
+    window.setStatusBar(status_bar)
 
     window.show()
 

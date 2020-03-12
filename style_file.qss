@@ -37,6 +37,7 @@ QToolButton {
 QToolButton:hover {
     background-color: #404040;
     min-width: 50px;
+    border-left: 3px solid #1C6EA4;
 }
 
 QToolButton:pressed {

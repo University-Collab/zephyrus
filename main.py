@@ -2,32 +2,21 @@ import sys
 from PySide2.QtWidgets import QApplication, QMainWindow
 from PySide2.QtGui import Qt
 
+from application.application import Application
+from main_window.main_window import MainWindow
 from toolbar.toolbar import Toolbar
 from status_bar.status_bar import StatusBar
-
-
-class MainWindow(QMainWindow):
-    def __init__(self):
-        QMainWindow.__init__(self)
-        self.setWindowTitle("Zephyrus - Information Handler")
-
-        with open("style_file.qss", "r") as qss_file:
-            self.setStyleSheet(qss_file.read())
-
-        self.menu = self.menuBar()
-
-        self.file_menu = self.menu.addMenu("File")
-        self.edit_menu = self.menu.addMenu("Edit")
-        self.tools_menu = self.menu.addMenu("Tools")
-        self.view_menu = self.menu.addMenu("View")
-        self.help_menu = self.menu.addMenu("Help")
+from menubar.menubar import Menubar
 
 
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
+    app = Application(sys.argv)
 
-    window = MainWindow()
+    window = MainWindow() 
     window.resize(800, 600)
+
+    menubar = Menubar(window)
+    window.setMenuBar(menubar)
 
     toolbar = Toolbar(window)
     window.addToolBar(Qt.LeftToolBarArea, toolbar)
@@ -37,4 +26,4 @@ if __name__ == "__main__":
 
     window.show()
 
-    sys.exit(app.exec_())
+    sys.exit(app.exec())

@@ -4,7 +4,7 @@ QMainWindow {
 
 QMenuBar {
     background-color: #1a1a1a;
-    color: white;
+    color: #7c7c7c;
     spacing: 3px;
 }
 
@@ -16,6 +16,7 @@ QMenuBar::item {
 
 QMenuBar::item:selected { /* when selected using mouse or keyboard */
     background: #404040;
+    color: white;
 }
 
 QMenuBar::item:pressed {
@@ -46,5 +47,10 @@ QToolButton:pressed {
 
 QStatusBar {
     color: #7b7b7b;
+    background-color: #1a1a1a;
+}
+
+QDockWidget {
+    color: #828282;
     background-color: #1a1a1a;
 }

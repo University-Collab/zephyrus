@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QMenuBar, QMenu
 from PySide2.QtGui import QIcon
 
+
 class Menubar(QMenuBar):
     def __init__(self, parent=None):
         super().__init__(parent)

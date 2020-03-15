@@ -7,12 +7,13 @@ from main_window.main_window import MainWindow
 from toolbar.toolbar import Toolbar
 from status_bar.status_bar import StatusBar
 from menubar.menubar import Menubar
+from dock.dock import Dock
 
 
 if __name__ == "__main__":
     app = Application(sys.argv)
 
-    window = MainWindow() 
+    window = MainWindow()
     window.resize(800, 600)
 
     menubar = Menubar(window)
@@ -23,6 +24,11 @@ if __name__ == "__main__":
 
     status_bar = StatusBar(window)
     window.setStatusBar(status_bar)
+
+    dock = Dock("Explorer", window)
+    window.addDockWidget(Qt.LeftDockWidgetArea, dock)
+    toggle_dock_action = dock.toggleViewAction()
+    menubar.view_menu.addAction(toggle_dock_action)
 
     window.show()
 

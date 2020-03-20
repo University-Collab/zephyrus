@@ -25,7 +25,7 @@ if __name__ == "__main__":
     status_bar = StatusBar(window)
     window.setStatusBar(status_bar)
 
-    dock = Dock("Explorer", window)
+    dock = Dock("File Explorer", window)
     window.addDockWidget(Qt.LeftDockWidgetArea, dock)
     toggle_dock_action = dock.toggleViewAction()
     menubar.view_menu.addAction(toggle_dock_action)

@@ -54,3 +54,25 @@ QDockWidget {
     color: #828282;
     background-color: #1a1a1a;
 }
+
+QTreeView {
+    color: #616161;
+    background-color: #1e1e1e;
+}
+
+QHeaderView {
+    color: #616161;
+    background-color: #1e1e1e;
+}
+
+QScrollBar:horizontal {
+    color: black;
+    background-color: #424242;
+    border: none;
+}
+
+QScrollBar:vertical {
+    color: white;
+    background-color: #424242;
+    border: none;
+}

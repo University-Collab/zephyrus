@@ -1,4 +1,4 @@
-QMainWindow {
+/* QMainWindow {
     background-color: #212121;
 }
 
@@ -12,18 +12,24 @@ QMenuBar::item {
     padding: 5px 4px;
     background: transparent;
     border-radius: 0;
-}
+} */
 
-QMenuBar::item:selected { /* when selected using mouse or keyboard */
+/* QMenuBar::item:selected { 
     background: #404040;
     color: white;
-}
+} */
 
-QMenuBar::item:pressed {
-    /* for on-click events */
-}
+/* QMenuBar::item:pressed {
+} */
 
-QToolBar {
+/* ovo ne radi iz nekog razloga */
+/* QMenuBar::item#menu_logo:hover,
+QMenuBar::item#menu_logo:selected, 
+QMenuBar::item#menu_logo:pressed {
+    background: #1a1a1a;
+} */
+
+/* QToolBar {
     background-color: #1a1a1a;
     min-width: 50px;
     spacing: 3px;
@@ -48,9 +54,9 @@ QToolButton:pressed {
 QStatusBar {
     color: #7b7b7b;
     background-color: #1a1a1a;
-}
+} */
 
-QDockWidget {
+/* QDockWidget {
     color: #828282;
     background-color: #1a1a1a;
 }
@@ -76,3 +82,11 @@ QScrollBar:vertical {
     background-color: #424242;
     border: none;
 }
+QTabBar::tab {
+    background-color: #1a1a1a;
+    color: #7c7c7c;
+}
+QTabBar::tab:selected {
+    background-color: #212121;
+    color: white
+}  */

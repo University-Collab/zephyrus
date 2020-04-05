@@ -1,0 +1,32 @@
+[
+    {
+        "city": "Novi Sad",
+        "firm name": "NoveSolutions",
+        "employee number": 200,
+        "profit": 400000
+    },
+    {
+        "city": "Wien",
+        "firm name": "TechBack",
+        "employee number": 40,
+        "profit": 42000
+    },
+    {
+        "city": "Wien",
+        "firm name": "WienPads",
+        "employee number": 100,
+        "profit": 200000
+    },
+    {
+        "city": "Novi Sad",
+        "firm name": "Novait",
+        "employee number": 20,
+        "profit": 20000
+    },
+    {
+        "city": "Berlin",
+        "firm name": "Berline CoM",
+        "employee number": 20,
+        "profit": 40000
+    }
+]

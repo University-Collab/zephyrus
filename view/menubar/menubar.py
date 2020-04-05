@@ -9,7 +9,9 @@ class Menubar(QMenuBar):
         self.init_menubar_menus()
 
     def init_menubar_menus(self):
-        self.menu_icon = QIcon("./images/logo/zephyrus_icon.png")
+        self.menu_icon = QMenu("Logo", self)
+        self.logo = QIcon("view/images/branding/menu_bar_logo.png")
+        self.menu_icon.setIcon(self.logo)
 
         self.file_menu = QMenu("File", self)
         self.edit_menu = QMenu("Edit", self)
@@ -17,7 +19,7 @@ class Menubar(QMenuBar):
         self.view_menu = QMenu("View", self)
         self.help_menu = QMenu("Help", self)
 
-        self.addMenu(self.menu_icon, "Logo")
+        self.addMenu(self.menu_icon)
         self.addMenu(self.file_menu)
         self.addMenu(self.edit_menu)
         self.addMenu(self.tools_menu)

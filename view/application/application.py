@@ -5,7 +5,7 @@ class Application(QApplication):
     def __init__(self, argv):
         super().__init__(argv)
 
-        with open("style_file.qss", "r") as qss_file:
+        with open("view/style_file.qss", "r") as qss_file:
             self.setStyleSheet(qss_file.read())
 
     def exec(self):

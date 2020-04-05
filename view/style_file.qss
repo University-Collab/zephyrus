@@ -14,13 +14,9 @@ QMenuBar::item {
     border-radius: 0;
 }
 
-QMenuBar::item:selected { /* when selected using mouse or keyboard */
+QMenuBar::item:selected { 
     background: #404040;
     color: white;
-}
-
-QMenuBar::item:pressed {
-    /* for on-click events */
 }
 
 QToolBar {
@@ -75,4 +71,28 @@ QScrollBar:vertical {
     color: white;
     background-color: #424242;
     border: none;
+}
+
+QTabBar::tab {
+    background-color: #1a1a1a;
+    color: #7c7c7c;
+}
+
+QTabBar::tab:selected {
+    background-color: #303030;
+    color: white
+}
+
+QTabWidget {
+    background-color: #1a1a1a;
+}
+
+QTableView{
+    background-color: #303030;
+    color: white;
+}
+
+QTableView::item:focus{
+    selection-background-color: #17cfcf;
+    selection-color: white;
 }

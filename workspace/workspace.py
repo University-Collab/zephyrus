@@ -4,7 +4,7 @@ import json
 from data_handler.serial_data_handler import SerialDataHandler
 from data_handler.sequential_data_handler import SequentialDataHandler
 
-from model.table_model import TableModel
+from table_model.table_model import TableModel
 
 class Workspace(QWidget):
     def __init__(self, file_path, parent=None):

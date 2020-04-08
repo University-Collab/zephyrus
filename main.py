@@ -16,7 +16,6 @@ if __name__ == "__main__":
     app = Application(sys.argv)
 
     window = MainWindow()
-    window.resize(800, 600)
 
     menubar = Menubar(window)
     window.setMenuBar(menubar)
@@ -35,6 +34,6 @@ if __name__ == "__main__":
     toggle_dock_action = dock.toggleViewAction()
     menubar.view_menu.addAction(toggle_dock_action)
 
-    window.show()
+    window.showMaximized()
 
     sys.exit(app.exec())

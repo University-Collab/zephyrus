@@ -1,5 +1,6 @@
 from PySide2.QtWidgets import QWidget, QTabWidget
-from PySide2.QtGui import QIcon, Qt
+from PySide2.QtGui import QIcon
+from PySide2.QtCore import Qt
 
 
 class CentralWidget(QTabWidget):

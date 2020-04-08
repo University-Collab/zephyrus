@@ -1,6 +1,7 @@
 import sys
 from PySide2.QtWidgets import QApplication, QMainWindow
-from PySide2.QtGui import Qt, QIcon
+from PySide2.QtGui import QIcon
+from PySide2.QtCore import Qt
 
 from view.application.application import Application
 from view.main_window.main_window import MainWindow

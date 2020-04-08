@@ -26,5 +26,5 @@ class Dock(QDockWidget):
         self.central_widget.add_tab(
             workspace,
             QIcon("view/images/branding/zephyrus_icon.png"),
-            file_path.split("storage/")[1].split(".")[0],
+            file_path.split("storage/")[1],
         )

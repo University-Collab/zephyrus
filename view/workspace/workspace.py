@@ -13,7 +13,7 @@ from controller.serial_data_handler.serial_data_handler import SerialDataHandler
 from controller.sequential_data_handler.sequential_data_handler import (
     SequentialDataHandler,
 )
-from view.table_model.table_model import TableModel
+from model.table_model.table_model import TableModel
 
 
 class Workspace(QWidget):

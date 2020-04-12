@@ -1,3 +1,4 @@
+import webbrowser
 from PySide2.QtWidgets import QMenuBar, QMenu
 from PySide2.QtGui import QIcon
 
@@ -18,6 +19,7 @@ class Menubar(QMenuBar):
         self.tools_menu = QMenu("Tools", self)
         self.view_menu = QMenu("View", self)
         self.help_menu = QMenu("Help", self)
+        self.theme_menu = QMenu("Theme", self.view_menu)
 
         self.addMenu(self.menu_icon)
         self.addMenu(self.file_menu)
@@ -25,6 +27,9 @@ class Menubar(QMenuBar):
         self.addMenu(self.tools_menu)
         self.addMenu(self.view_menu)
         self.addMenu(self.help_menu)
-
-        self.theme_menu = QMenu("Theme", self.view_menu)
         self.view_menu.addMenu(self.theme_menu)
+
+        self.help_menu.addAction("About", self.about_page)
+
+    def about_page(self):
+        webbrowser.open("https://university-collab.github.io/zephyrus/")

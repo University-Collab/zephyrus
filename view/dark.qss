@@ -270,7 +270,7 @@ QRadioButton::indicator:checked:disabled {
 QMenuBar {
   background-color: #32414B;
   padding: 2px;
-  border: 1px solid #19232D;
+  border: 1px hidden #148CD2;
   color: #F0F0F0;
 }
 
@@ -602,7 +602,6 @@ QStackedWidget {
 /* QToolBar */
 QToolBar {
   background-color: #32414B;
-  border-bottom: 1px solid #19232D;
   padding: 2px;
   font-weight: bold;
   spacing: 2px;
@@ -1490,6 +1489,7 @@ QDockWidget::title {
   padding: 6px;
   spacing: 4px;
   border: none;
+  padding-top: 10px;
   background-color: #32414B;
 }
 

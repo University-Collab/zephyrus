@@ -18,6 +18,8 @@ if __name__ == "__main__":
     window = MainWindow()
 
     menubar = Menubar(window)
+    menubar.theme_menu.addAction("Dark", app.set_dark_theme)
+    menubar.theme_menu.addAction("Light", app.set_light_theme)
     window.setMenuBar(menubar)
 
     toolbar = Toolbar(window)

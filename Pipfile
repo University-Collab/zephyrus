@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 PySide2 = "*"
 mysql = "*"
+bson = "*"
 
 [dev-packages]
 black = "*"

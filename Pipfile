@@ -7,9 +7,9 @@ name = "pypi"
 PySide2 = "*"
 mysql = "*"
 bson = "*"
+yapf = "*"
 
 [dev-packages]
-black = "*"
 
 [requires]
 python_version = "3.7"

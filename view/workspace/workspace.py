@@ -11,8 +11,7 @@ from PySide2.QtWidgets import (
 
 from controller.serial_data_handler.serial_data_handler import SerialDataHandler
 from controller.sequential_data_handler.sequential_data_handler import (
-    SequentialDataHandler,
-)
+    SequentialDataHandler, )
 from model.table_model.table_model import TableModel
 
 
@@ -22,8 +21,6 @@ class Workspace(QWidget):
 
         self.main_layout = QVBoxLayout()
         self.tab_widget = None
-        # ZA SADA korisnik MORA da klikne na fajl koji NIJE metadata
-        # metadata MORA da ima ekstenziju .json ZA SADA
         self.file_path = file_path
         self.meta_path = None
         self.handler_type = None
@@ -43,16 +40,22 @@ class Workspace(QWidget):
         self.main_layout.addWidget(self.tab_widget)
         self.setLayout(self.main_layout)
 
+    def handler_type_check(self):
+        with open(self.meta_path) as metadata:
+            data = json.load(metadata)
+            self.meta_data = data
+            if data["handler type"] == "serial":
+                return "serial"
+            elif data["handler type"] == "sequential":
+                return "sequential"
+
     def create_model(self):
         temp = self.file_path.split("storage/")
         self.meta_path = temp[0] + "meta/" + temp[1].split(".")[0] + "_metadata.json"
         with open(self.meta_path) as metadata:
             data = json.load(metadata)
             self.meta_data = data
-            if data["handler type"] == "serial":
-                self.handler_type = "serial"
-            elif data["handler type"] == "sequential":
-                self.handler_type = "sequential"
+            self.handler_type = self.handler_type_check()
 
         if self.handler_type == "serial":
             self.handler = SerialDataHandler(self.file_path, self.meta_path)
@@ -68,10 +71,13 @@ class Workspace(QWidget):
         model = self.main_table.model()
         selected_data = model.get_element(index)
 
+        type = self.handler_type_check()
         unique_data = selected_data[self.meta_data["search key"]]
-        subtable_model = TableModel(
-            SerialDataHandler(self.file_path, self.meta_path, False, unique_data)
-        )
+
+        if type == "serial":
+            subtable_model = TableModel(SerialDataHandler(self.file_path, self.meta_path, False, unique_data))
+        else:
+            subtable_model = TableModel(SequentialDataHandler(self.file_path, self.meta_path, False, unique_data))
 
         subtable = QTableView(self.tab_widget)
         subtable.setModel(subtable_model)

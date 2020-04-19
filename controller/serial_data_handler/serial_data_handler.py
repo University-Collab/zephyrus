@@ -20,11 +20,7 @@ class SerialDataHandler(DataHandler):
         with open(self.meta_path) as data_file:
             self.meta_data = json.load(data_file)
             self.search_key = self.meta_data["search key"]
-            self.linked_file_path = (
-                self.path.split("storage/")[0]
-                + "storage/"
-                + self.meta_data["linked file"]
-            )
+            self.linked_file_path = (self.path.split("storage/")[0] + "storage/" + self.meta_data["linked file"])
 
         if self.is_parent_table == True:
             with open(self.path) as data_file:
@@ -48,16 +44,34 @@ class SerialDataHandler(DataHandler):
 
     def insert(self, obj):
         self.data.append(obj)
-        self.save()
+        self.save(self.data, parent_table=True)
 
-    def save(self):
-        if self.is_parent_table == True:
+    def save(self, data, parent_table=False, sub_table=False):
+        if parent_table and not sub_table:
             with open(self.path, "w") as json_file:
-                json.dump(self.data, json_file, indent=4)
+                json.dump(data, json_file, indent=4)
+        elif sub_table and not parent_table:
+            with open(self.linked_file_path, "w") as json_file:
+                json.dump(data, json_file, indent=4)
+
+    def edit(self, obj):
+        if self.is_parent_table:
+            """
+            DELETE IF NOT NEEDED
+            """
+            # for d in self.data:
+            #     if getattr(d, self.search_key) == getattr(obj, self.search_key):
+            #         for key in self.meta_data["columns"]:
+            #             d[key] = obj[key]
+            #         self.save(self.data, parent_table=True)
+            #         return
+            # return
+            self.save(self.data, parent_table=True)
         else:
             data = []
             for d in self.loaded_data:
                 data.append(d)
+
             i = 0
 
             # removing old objects that were shown
@@ -69,17 +83,7 @@ class SerialDataHandler(DataHandler):
             for updated_obj in self.data:
                 data.append(updated_obj)
 
-            with open(self.linked_file_path, "w") as json_file:
-                json.dump(data, json_file, indent=4)
-
-    def edit(self, obj):
-        for d in self.data:
-            if getattr(d, self.search_key) == getattr(obj, self.search_key):
-                for key in self.meta_data["columns"]:
-                    d[key] = obj[key]
-                self.save()
-                return
-        return
+            self.save(data, sub_table=True)
 
     def edit_subtable_unique_data(self, old_value, new_value):
         subtable_data = []
@@ -97,13 +101,13 @@ class SerialDataHandler(DataHandler):
         for d in self.data:
             if getattr(d, self.search_key) == unique_data:
                 self.data.pop(position)
-                self.save()
+                self.save(self.data, parent_table=True)
                 return
             position += 1
         return
 
-    def add_multiple(self, array):
-        for element in array:
+    def add_multiple(self, list):
+        for element in list:
             self.data.append(element)
-        self.save()
+        self.save(self.data, parent_table=True)
         return

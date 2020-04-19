@@ -1,8 +1,8 @@
 {
-  "search key": "day_id",
+  "search key": "Name",
   "columns": ["Name", "Time"],
   "handler type": "sequential",
-  "linked file": "days.json",
-  "additional tab name": "Task Day",
-  "subtable columns": ["Day of the week"]
+  "linked file": "task_details.json",
+  "additional tab name": "Task Details",
+  "subtable columns": ["Name", "Details"]
 }

@@ -1,8 +1,8 @@
 {
   "search key": "Name",
-  "columns": ["Name", "Details"],
+  "columns": ["Details"],
   "handler type": "sequential",
-  "linked file": "tasks.json",
+  "linked file": "tasks",
   "additional tab name": "Task",
   "subtable columns": ["Name", "Time"]
 }

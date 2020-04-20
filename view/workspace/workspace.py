@@ -1,4 +1,4 @@
-import json
+import json, pickle
 from PySide2.QtWidgets import (
     QWidget,
     QLabel,
@@ -51,7 +51,8 @@ class Workspace(QWidget):
 
     def create_model(self):
         temp = self.file_path.split("storage/")
-        self.meta_path = temp[0] + "meta/" + temp[1].split(".")[0] + "_metadata.json"
+        self.meta_path = temp[0] + "meta/" + temp[1].split(
+            ".")[0] + "_metadata.json"
         with open(self.meta_path) as metadata:
             data = json.load(metadata)
             self.meta_data = data
@@ -63,7 +64,8 @@ class Workspace(QWidget):
             self.main_table.setModel(self.table_model)
 
         if self.handler_type == "sequential":
-            self.handler = SequentialDataHandler(self.file_path, self.meta_path)
+            self.handler = SequentialDataHandler(self.file_path,
+                                                 self.meta_path)
             self.table_model = TableModel(self.handler)
             self.main_table.setModel(self.table_model)
 
@@ -75,9 +77,13 @@ class Workspace(QWidget):
         unique_data = selected_data[self.meta_data["search key"]]
 
         if type == "serial":
-            subtable_model = TableModel(SerialDataHandler(self.file_path, self.meta_path, False, unique_data))
+            subtable_model = TableModel(
+                SerialDataHandler(self.file_path, self.meta_path, False,
+                                  unique_data))
         else:
-            subtable_model = TableModel(SequentialDataHandler(self.file_path, self.meta_path, False, unique_data))
+            subtable_model = TableModel(
+                SequentialDataHandler(self.file_path, self.meta_path, False,
+                                      unique_data))
 
         subtable = QTableView(self.tab_widget)
         subtable.setModel(subtable_model)

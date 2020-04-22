@@ -3,11 +3,7 @@ from controller.data_handler.data_handler import DataHandler
 
 
 class SerialDataHandler(DataHandler):
-    def __init__(self,
-                 path,
-                 meta_path,
-                 is_parent_table=True,
-                 unique_data=None):
+    def __init__(self, path, meta_path, is_parent_table=True, unique_data=None):
         super().__init__()
         self.path = path
         self.meta_path = meta_path
@@ -24,9 +20,7 @@ class SerialDataHandler(DataHandler):
         with open(self.meta_path, "r") as data_file:
             self.meta_data = json.load(data_file)
             self.search_key = self.meta_data["search key"]
-            self.linked_file_path = (self.path.split("storage/")[0] +
-                                     "storage/" +
-                                     self.meta_data["linked file"])
+            self.linked_file_path = (self.path.split("storage/")[0] + "storage/" + self.meta_data["linked file"])
 
         if self.is_parent_table == True:
             with open(self.path, "rb") as data_file:
@@ -62,24 +56,9 @@ class SerialDataHandler(DataHandler):
 
     def edit(self, obj):
         if self.is_parent_table:
-            self.save(self.data, parent_table=True)
+            self.save(data=self.data, parent_table=True)
         else:
-            data = []
-            for d in self.loaded_data:
-                data.append(d)
-
-            i = 0
-
-            # removing old objects that were shown
-            for d in data:
-                if d[self.search_key] == self.unique_data:
-                    data.pop(i)
-                i += 1
-
-            for updated_obj in self.data:
-                data.append(updated_obj)
-
-            self.save(data, sub_table=True)
+            self.save(data=self.loaded_data, sub_table=True)
 
     def edit_subtable_unique_data(self, old_value, new_value):
         subtable_data = []

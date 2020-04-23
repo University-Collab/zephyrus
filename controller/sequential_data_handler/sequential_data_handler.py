@@ -39,18 +39,25 @@ class SequentialDataHandler(DataHandler):
         elif len(self.data) == 1:
             return data[0]
         else:
-            for d in self.data:
-                return self.data[bisect.bisect_left(self.data, unique_data)]
+            one = self.data[self.find_index(self.data, unique_data)]
+            if one is not None:
+                return one
 
     def get_all(self):
         return self.data
 
     def insert(self, obj):
-        if len(self.data) == 0:
-            self.data.append(obj)
+        key_exists = self.find_index(self.data, obj[self.search_key])
+
+        if key_exists is not None:
+            return
         else:
-            bisect.insort_left(self.data, obj)
-        self.save(data=self.data, parent_table=True)
+            keys = [unique[self.search_key] for unique in self.data]
+            bisect.insort_left(keys, obj[self.search_key])
+            index = self.find_index(keys, obj[self.search_key])
+
+            self.data.insert(index, obj)
+            self.save(data=self.data, parent_table=True)
 
     def save(self, data, parent_table=False, sub_table=False):
         if parent_table and not sub_table:
@@ -85,12 +92,26 @@ class SequentialDataHandler(DataHandler):
             self.data.pop(0)
             self.save(data=self.data, parent_table=True)
         else:
-            self.data.pop(bisect.bisect_left(self.data, unique_data))
+            self.data.pop(self.find_index(self.data, unique_data))
             self.save(data=self.data, parent_table=True)
         return
 
     def add_multiple(self, list):
         for element in list:
-            bisect.insort_left(self.data, element)
-        self.save(data=self.data, parent_table=True)
+            self.insert(element)
         return
+
+    def find_index(self, list, value):
+        start, end = 0, len(list) - 1
+
+        while start <= end:
+            middle = (start + end) // 2
+
+            if getattr(list[middle], self.search_key) == value:
+                return middle
+            elif getattr(list[middle], self.search_key) < value:
+                start = middle + 1
+            elif getattr(list[middle], self.search_key) > value:
+                end = middle - 1
+
+        return None

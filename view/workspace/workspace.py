@@ -1,18 +1,14 @@
 import json, pickle
-from PySide2.QtWidgets import (
-    QWidget,
-    QLabel,
-    QVBoxLayout,
-    QTabWidget,
-    QTableView,
-    QAbstractItemView,
-    QLineEdit,
-)
+from PySide2.QtWidgets import (QWidget, QLabel, QVBoxLayout, QTabWidget,
+                               QTableView, QAbstractItemView, QLineEdit, QMenu,
+                               QAction, QSizePolicy)
+from PySide2 import QtGui
 
 from controller.serial_data_handler.serial_data_handler import SerialDataHandler
 from controller.sequential_data_handler.sequential_data_handler import (
     SequentialDataHandler, )
 from model.table_model.table_model import TableModel
+from view.table_view.table_view import TableView
 
 
 class Workspace(QWidget):
@@ -29,9 +25,10 @@ class Workspace(QWidget):
         self.meta_data = None
         self.create_tab_widget()
 
-        self.main_table = QTableView(self.tab_widget)
+        self.main_table = TableView(self.tab_widget)
         self.main_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.main_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+
         self.create_model()
 
         self.main_table.clicked.connect(self.row_selected)
@@ -85,8 +82,9 @@ class Workspace(QWidget):
                 SequentialDataHandler(self.file_path, self.meta_path, False,
                                       unique_data))
 
-        subtable = QTableView(self.tab_widget)
+        subtable = TableView(self.tab_widget)
         subtable.setModel(subtable_model)
+
         self.tab_widget.addTab(subtable, self.meta_data["additional tab name"])
 
     def create_tab_widget(self):

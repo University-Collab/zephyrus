@@ -7,12 +7,17 @@ from PySide2.QtWidgets import (
     QTableView,
     QAbstractItemView,
     QLineEdit,
+    QMenu,
+    QAction,
+    QSizePolicy
 )
+from PySide2 import QtGui
 
 from controller.serial_data_handler.serial_data_handler import SerialDataHandler
 from controller.sequential_data_handler.sequential_data_handler import (
     SequentialDataHandler, )
 from model.table_model.table_model import TableModel
+from view.table_view.table_view import TableView
 
 
 class Workspace(QWidget):
@@ -29,9 +34,13 @@ class Workspace(QWidget):
         self.meta_data = None
         self.create_tab_widget()
 
-        self.main_table = QTableView(self.tab_widget)
+        # zar ne bi trebalo da ide parent a ne tab_widget
+        self.main_table = TableView(self.tab_widget)
         self.main_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.main_table.setSelectionBehavior(QAbstractItemView.SelectRows)
+
+        # self.main_table.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         self.create_model()
 
         self.main_table.clicked.connect(self.row_selected)
@@ -70,8 +79,10 @@ class Workspace(QWidget):
             self.main_table.setModel(self.table_model)
 
     def row_selected(self, index):
+        # print(index)
         model = self.main_table.model()
         selected_data = model.get_element(index)
+        # print(selected_data)
 
         type = self.handler_type_check()
         unique_data = selected_data[self.meta_data["search key"]]
@@ -85,8 +96,11 @@ class Workspace(QWidget):
                 SequentialDataHandler(self.file_path, self.meta_path, False,
                                       unique_data))
 
-        subtable = QTableView(self.tab_widget)
+        subtable = TableView(self.tab_widget)
+        # subtable.setSizePolicy(QSizePolicy.Minimum, QSizePolicy.Minimum)
+
         subtable.setModel(subtable_model)
+
         self.tab_widget.addTab(subtable, self.meta_data["additional tab name"])
 
     def create_tab_widget(self):
@@ -96,3 +110,22 @@ class Workspace(QWidget):
 
     def delete_tab(self, index):
         self.tab_widget.removeTab(index)
+
+    # def contextMenuEvent(self, event):
+    #     self.menu = QMenu(self)
+    #     addRow = QAction('Add new row', self)
+    #     deleteRow = QAction('Remove row', self)
+
+    #     addRow.triggered.connect(lambda: self.add_row(event))
+    #     deleteRow.triggered.connect(lambda: self.remove_row(event))
+
+    #     self.menu.addAction(addRow)
+    #     self.menu.addAction(deleteRow)
+
+    #     self.menu.popup(QtGui.QCursor.pos())
+
+    # def add_row(self, event):
+    #     print("Add row ")
+
+    # def remove_row(self, event):
+    #     print('remove row')

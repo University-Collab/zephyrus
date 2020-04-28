@@ -88,3 +88,27 @@ class TableModel(QAbstractTableModel):
 
     def flags(self, index):
         return super().flags(index) | QtCore.Qt.ItemIsEditable
+
+
+    def removeRows(self, row, rows, index=QtCore.QModelIndex()):
+        self.beginRemoveRows(index, row, row + rows - 1)
+        self.d.pop(row) 
+        self.handler_reference.edit(self.d)
+        self.endRemoveRows()
+        return True
+        
+    def insertRows(self, row, rows, index=QtCore.QModelIndex()):
+        self.beginInsertRows(index, row, row + rows - 1)
+        new_obj = {}
+        if self.is_parent_table:
+            for key in self.metadata['columns']:
+                new_obj[key] = "..."
+        else: 
+            for key in self.metadata['subtable columns']:
+                new_obj[key] = "..."
+        # print(new_obj)
+        self.d.append(new_obj)
+        self.handler_reference.edit(self.data)
+        self.endInsertRows()
+        return True
+    

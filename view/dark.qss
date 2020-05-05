@@ -614,7 +614,7 @@ QToolBar QToolButton {
 
 QToolBar QToolButton:hover {
   border: 1px solid #148CD2;
-  background-color: #19232D;
+  background-color: #658498;
 }
 
 QToolBar QToolButton:checked {

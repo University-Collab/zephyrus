@@ -25,6 +25,6 @@ class Dock(QDockWidget):
         workspace = Workspace(file_path, self.central_widget)
         self.central_widget.add_tab(
             workspace,
-            QIcon("view/images/branding/zephyrus_icon.png"),
+            QIcon("view/images/dark/baseline_notes_black_48dp.png"),
             file_path.split("storage/")[1],
         )

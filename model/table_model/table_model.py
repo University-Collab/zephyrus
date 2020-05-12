@@ -24,7 +24,6 @@ class TableModel(QAbstractTableModel):
 
     def data(self, index, role):
         if role == QtCore.Qt.DisplayRole:
-            # TODO: dodati obradu uloga (role)
             data = self.get_element(index)
             i = 0
 
@@ -38,35 +37,30 @@ class TableModel(QAbstractTableModel):
                         return data[self.metadata["subtable columns"][i]]
 
             return None
-            
+
         elif role == QtCore.Qt.EditRole:
-            self.pozicija = index
+            self.position = index
             obj = self.d[index.row()]
             key_number = index.column()
             if self.is_parent_table == True:
                 edited_key = self.metadata['columns'][key_number]
-                print(edited_key)  
                 edited_data = obj.get(edited_key)
                 return edited_data
             if self.is_parent_table == False:
                 edited_key = self.metadata['subtable columns'][key_number]
-                print(edited_key)  
                 edited_data = obj.get(edited_key)
                 return edited_data
-            
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         i = 0
         if self.is_parent_table == True:
             for i in range(len(self.metadata["columns"])):
-                if (section == i and orientation == QtCore.Qt.Horizontal
-                        and role == QtCore.Qt.DisplayRole):
+                if (section == i and orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole):
                     return self.metadata["columns"][i]
 
         if self.is_parent_table == False:
             for i in range(len(self.metadata["subtable columns"])):
-                if (section == i and orientation == QtCore.Qt.Horizontal
-                        and role == QtCore.Qt.DisplayRole):
+                if (section == i and orientation == QtCore.Qt.Horizontal and role == QtCore.Qt.DisplayRole):
                     return self.metadata["subtable columns"][i]
 
         return None
@@ -83,11 +77,9 @@ class TableModel(QAbstractTableModel):
         if self.is_parent_table == True:
             for i in range(len(self.metadata["columns"])):
                 if index.column() == i and role == QtCore.Qt.EditRole:
-                    if self.metadata["columns"][i] == self.metadata[
-                            "search key"]:
+                    if self.metadata["columns"][i] == self.metadata["search key"]:
                         old_value = data[self.metadata["columns"][i]]
-                        self.handler_reference.edit_subtable_unique_data(
-                            old_value, value)
+                        self.handler_reference.edit_subtable_unique_data(old_value, value)
 
                     data[self.metadata["columns"][i]] = value
                     self.handler_reference.edit(data)
@@ -96,11 +88,9 @@ class TableModel(QAbstractTableModel):
         if self.is_parent_table == False:
             for i in range(len(self.metadata["subtable columns"])):
                 if index.column() == i and role == QtCore.Qt.EditRole:
-                    if self.metadata["subtable columns"][i] == self.metadata[
-                            "search key"]:
+                    if self.metadata["subtable columns"][i] == self.metadata["search key"]:
                         old_value = data[self.metadata["subtable columns"][i]]
-                        self.handler_reference.edit_subtable_unique_data(
-                            old_value, value)
+                        self.handler_reference.edit_subtable_unique_data(old_value, value)
 
                     data[self.metadata["subtable columns"][i]] = value
                     self.handler_reference.edit(data)

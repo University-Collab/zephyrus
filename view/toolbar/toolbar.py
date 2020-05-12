@@ -27,13 +27,3 @@ class Toolbar(QToolBar):
         self.search.setIcon(QIcon("view/images/toolbar/search.png"))
         self.search.setToolTip("Search")
         self.addWidget(self.search)
-
-        self.undo = QToolButton(self)
-        self.undo.setIcon(QIcon("view/images/toolbar/undo.png"))
-        self.undo.setToolTip("Undo Changes")
-        self.addWidget(self.undo)
-
-        self.redo = QToolButton(self)
-        self.redo.setIcon(QIcon("view/images/toolbar/redo.png"))
-        self.redo.setToolTip("Redo Changes")
-        self.addWidget(self.redo)

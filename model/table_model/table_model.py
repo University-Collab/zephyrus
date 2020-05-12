@@ -22,20 +22,38 @@ class TableModel(QAbstractTableModel):
         else:
             return len(self.metadata["subtable columns"])
 
-    def data(self, index, role=QtCore.Qt.DisplayRole):
-        data = self.get_element(index)
-        i = 0
+    def data(self, index, role):
+        if role == QtCore.Qt.DisplayRole:
+            # TODO: dodati obradu uloga (role)
+            data = self.get_element(index)
+            i = 0
 
-        if self.is_parent_table == True:
-            for i in range(len(self.metadata["columns"])):
-                if index.column() == i and role == QtCore.Qt.DisplayRole:
-                    return data[self.metadata["columns"][i]]
-        else:
-            for i in range(len(self.metadata["subtable columns"])):
-                if index.column() == i and role == QtCore.Qt.DisplayRole:
-                    return data[self.metadata["subtable columns"][i]]
+            if self.is_parent_table == True:
+                for i in range(len(self.metadata["columns"])):
+                    if index.column() == i and role == QtCore.Qt.DisplayRole:
+                        return data[self.metadata["columns"][i]]
+            else:
+                for i in range(len(self.metadata["subtable columns"])):
+                    if index.column() == i and role == QtCore.Qt.DisplayRole:
+                        return data[self.metadata["subtable columns"][i]]
 
-        return None
+            return None
+            
+        elif role == QtCore.Qt.EditRole:
+            self.pozicija = index
+            obj = self.d[index.row()]
+            key_number = index.column()
+            if self.is_parent_table == True:
+                edited_key = self.metadata['columns'][key_number]
+                print(edited_key)  
+                edited_data = obj.get(edited_key)
+                return edited_data
+            if self.is_parent_table == False:
+                edited_key = self.metadata['subtable columns'][key_number]
+                print(edited_key)  
+                edited_data = obj.get(edited_key)
+                return edited_data
+            
 
     def headerData(self, section, orientation, role=QtCore.Qt.DisplayRole):
         i = 0

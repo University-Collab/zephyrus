@@ -4,6 +4,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# MySQL Workbench
+*.bak
+
 # C extensions
 *.so
 

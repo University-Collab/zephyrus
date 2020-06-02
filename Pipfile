@@ -7,6 +7,7 @@ name = "pypi"
 PySide2 = "*"
 mysql = "*"
 yapf = "*"
+pymysql = "*"
 
 [dev-packages]
 yapf = "*"

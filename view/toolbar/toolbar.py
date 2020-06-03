@@ -8,14 +8,14 @@ class Toolbar(QToolBar):
         self.init_toolbar_buttons()
 
     def init_toolbar_buttons(self):
-        self.create_new = QToolButton(self)
-        self.create_new.setIcon(QIcon("view/images/toolbar/new.png"))
-        self.create_new.setToolTip("Create New")
-        self.addWidget(self.create_new)
+        self.connect_database = QToolButton(self)
+        self.connect_database.setIcon(QIcon("view/images/toolbar/database-connect.png"))
+        self.connect_database.setToolTip("Connect Database")
+        self.addWidget(self.connect_database)
 
         self.open = QToolButton(self)
         self.open.setIcon(QIcon("view/images/toolbar/open.png"))
-        self.open.setToolTip("Open")
+        self.open.setToolTip("Open File")
         self.addWidget(self.open)
 
         self.save = QToolButton(self)

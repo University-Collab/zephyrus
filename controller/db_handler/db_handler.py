@@ -1,5 +1,5 @@
 import pymysql as mysql
-from controller.data_handler import DataHandler
+from controller.data_handler.data_handler import DataHandler
 
 
 class DBHandler(DataHandler):

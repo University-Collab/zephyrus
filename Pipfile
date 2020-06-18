@@ -8,12 +8,10 @@ PySide2 = "*"
 mysql = "*"
 yapf = "*"
 pymysql = "*"
+bcrypt = "*"
 
 [dev-packages]
 yapf = "*"
-
-[requires]
-python_version = "3"
 
 [pipenv]
 allow_prereleases = true

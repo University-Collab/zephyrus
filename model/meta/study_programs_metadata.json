@@ -1,0 +1,16 @@
+{
+    "search key": "name",
+    "representing key": "id",
+    "columns": ["name", "espb_points", "duration", "postgraduation_title"],
+    "handler type": "serial",
+    "additional tab name": "students",
+    "linked file": "students",
+    "subtable columns": ["student_index",
+        "first_name",
+        "last_name",
+        "date_of_birth",
+        "jmbg",
+        "enrolled_at",
+        "email",
+        "semester"]
+  } 

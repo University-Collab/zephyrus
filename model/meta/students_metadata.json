@@ -1,0 +1,16 @@
+{
+    "search key": "study_program_name",
+    "representing key": "id",
+    "columns": ["student_index",
+          "first_name",
+          "last_name",
+          "date_of_birth",
+          "jmbg",
+          "enrolled_at",
+          "email",
+          "semester", "study_program_name" ],
+    "handler type": "serial",
+    "additional tab name": "study program",
+    "linked file": "study_programs",
+    "subtable columns": ["name", "espb_points", "duration", "postgraduation_title"]
+  } 

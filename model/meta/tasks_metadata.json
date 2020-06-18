@@ -1,8 +1,0 @@
-{
-  "search key": "Name",
-  "columns": ["Name", "Time"],
-  "handler type": "sequential",
-  "linked file": "task_details",
-  "additional tab name": "Task Details",
-  "subtable columns": ["Details"]
-}

@@ -1,10 +1,6 @@
-bcrypt==3.1.7
-cffi==1.14.0
 mysql==0.0.2
 mysqlclient==1.4.6
-pycparser==2.20
 pymysql==0.9.3
 pyside2==5.15.0
 shiboken2==5.15.0
-six==1.15.0
 yapf==0.30.0

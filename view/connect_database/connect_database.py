@@ -1,5 +1,6 @@
-from PySide2.QtWidgets import QDialog, QLineEdit, QPushButton, QGridLayout, QLabel
-from PySide2.QtSql import QSqlDatabase
+import pickle, os
+import pymysql as mysql
+from PySide2.QtWidgets import QDialog, QLineEdit, QPushButton, QGridLayout, QLabel, QMessageBox
 from controller.db_handler.db_handler import DBHandler
 
 class ConnectDatabase(QDialog):
@@ -51,11 +52,75 @@ class ConnectDatabase(QDialog):
         self.show()
 
     def connect(self):
-        # Just for testing
+        # Just for testing DELETE
         print(
             f'User: {self.user.text()}\nPassword: {self.password.text()}\nDB name: {self.db_name.text()}\nHost Name: {self.host_name.text()}'
         )
 
-        """
-        Implement using 'QSqlDatabase' PySide2 module
-        """
+        if os.path.getsize("model/session/connected_dbs") > 0:
+            with open("model/session/connected_dbs", "rb") as sessions:
+                db_sessions = pickle.load(sessions)
+        else:
+            db_sessions = []
+
+        is_connected = False
+        
+        for db in db_sessions:
+            if db["db"] == self.db_name.text():
+                is_connected = True
+
+                err_mssg = QMessageBox(self)
+                err_mssg.setText("Database with the same name is already connected.")
+                err_mssg.setStandardButtons(QMessageBox.Close)
+                err_mssg.setIcon(QMessageBox.Critical)
+                err_mssg.setWindowTitle("Database Already Connected")
+                err_mssg.setModal(True)
+                err_mssg.exec()
+
+                break
+
+        if not is_connected:
+            try:
+                connection = mysql.connect(
+                    host=self.host_name.text(),
+                    user=self.user.text(),
+                    password=self.password.text(),
+                    db=self.db_name.text(),
+                    charset="utf8mb4",
+                    cursorclass=mysql.cursors.DictCursor
+                )
+
+                print("\nConnected successfully\n")
+
+                db_sessions.append(
+                    {
+                        "host": self.host_name.text(),
+                        "user": self.user.text(),
+                        "password": self.password.text(),
+                        "db": self.db_name.text()
+                    }
+                )
+
+                connected_mssg = QMessageBox(self)
+                connected_mssg.setText("Hooray! Database successfully connected with Zephyrus.")
+                connected_mssg.setStandardButtons(QMessageBox.Ok)
+                connected_mssg.setIcon(QMessageBox.Information)
+                connected_mssg.setWindowTitle("Database connected. You rock!")
+                connected_mssg.setModal(True)
+                connected_mssg.exec()
+
+                with open("model/session/connected_dbs", "wb") as sessions:
+                    pickle.dump(db_sessions, sessions)
+
+            except mysql.Error as e:
+                print(f'\nDB Error: {e.args[1]}\n')
+                err_mssg = QMessageBox(self)
+                err_mssg.setText("Wrong database credentials, you might be bad at typing...")
+                err_mssg.setStandardButtons(QMessageBox.Close)
+                err_mssg.setIcon(QMessageBox.Critical)
+                err_mssg.setWindowTitle("Database Error")
+                err_mssg.setModal(True)
+                err_mssg.exec()
+            
+            finally:
+                connection.close()

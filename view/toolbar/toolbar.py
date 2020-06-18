@@ -20,13 +20,3 @@ class Toolbar(QToolBar):
         self.open.setIcon(QIcon("view/images/toolbar/open.png"))
         self.open.setToolTip("Open File")
         self.addWidget(self.open)
-
-        self.save = QToolButton(self)
-        self.save.setIcon(QIcon("view/images/toolbar/save.png"))
-        self.save.setToolTip("Save")
-        self.addWidget(self.save)
-
-        self.search = QToolButton(self)
-        self.search.setIcon(QIcon("view/images/toolbar/search.png"))
-        self.search.setToolTip("Search")
-        self.addWidget(self.search)

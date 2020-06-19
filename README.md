@@ -1,10 +1,10 @@
 ![Zephyrus Cover](./view/images/branding/cover.png)
 
-Information Handler
+## What is Zephyrus? :thinking:
+Zephyrus is a generic data handler which aims to bring 'cool' back into data manipulation, making both, data stored inside of files within your file system, and data existing in different MySQL databases, a breeze to work with :wind_chime:.
 
-**Currently in development**
-
+Zephyrus is a sophomore university project :hammer: by **Nikola Lausev** and **David Zahorodni**.
 
 ## Getting Started
 1. Install dependencies either by running `pipenv install` or `pip install -r requirements.txt`
-2. Run **main.py**
+2. Run command `python main.py`

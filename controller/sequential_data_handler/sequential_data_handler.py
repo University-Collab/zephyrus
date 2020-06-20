@@ -11,6 +11,7 @@ class SequentialDataHandler(DataHandler):
         self.data = []
         self.meta_data = {}
         self.search_key = ""
+        self.representing_key = ""
         self.linked_file_path = ""
         self.unique_data = unique_data
         self.load_data()
@@ -19,11 +20,12 @@ class SequentialDataHandler(DataHandler):
         with open(self.meta_path, "r") as data_file:
             self.meta_data = json.load(data_file)
             self.search_key = self.meta_data["search key"]
+            self.representing_key = self.meta_data["representing key"]
             
-        with open(self.linked_file_path, "rb") as data_file:
-            loaded_data = sorted(pickle.load(data_file), key=lambda k: k[self.search_key])
+        with open(self.path, "rb") as data_file:
+            loaded_data = sorted(pickle.load(data_file), key=lambda k: k[self.representing_key])
             if self.unique_data:
-                for obj in self.loaded_data:
+                for obj in loaded_data:
                     if obj[self.search_key] == self.unique_data:
                         self.data.append(obj)
             else:
@@ -43,14 +45,14 @@ class SequentialDataHandler(DataHandler):
         return self.data
 
     def insert(self, obj):
-        key_exists = self.find_index(self.data, obj[self.search_key])
+        key_exists = self.find_index(self.data, obj[self.representing_key])
 
         if key_exists is not None:
             return
         else:
-            keys = [unique[self.search_key] for unique in self.data]
-            bisect.insort_left(keys, obj[self.search_key])
-            index = self.find_index(keys, obj[self.search_key])
+            keys = [unique[self.representing_key] for unique in self.data]
+            bisect.insort_left(keys, obj[self.representing_key])
+            index = self.find_index(keys, obj[self.representing_key])
 
             self.data.insert(index, obj)
             self.save(data=self.data)
@@ -59,8 +61,8 @@ class SequentialDataHandler(DataHandler):
         with open(self.path, "wb") as pickle_file:
             pickle.dump(data, pickle_file)
 
-    def edit(self, obj):
-        self.save(data=sorted(self.data, key=lambda k: k[self.search_key]))
+    def edit(self):
+        self.save(data=sorted(self.data, key=lambda k: k[self.representing_key]))
 
     def delete_one(self, unique_data):
         if len(self.data) == 1:
@@ -82,11 +84,11 @@ class SequentialDataHandler(DataHandler):
         while start <= end:
             middle = (start + end) // 2
 
-            if getattr(list[middle], self.search_key) == value:
+            if getattr(list[middle], self.representing_key) == value:
                 return middle
-            elif getattr(list[middle], self.search_key) < value:
+            elif getattr(list[middle], self.representing_key) < value:
                 start = middle + 1
-            elif getattr(list[middle], self.search_key) > value:
+            elif getattr(list[middle], self.representing_key) > value:
                 end = middle - 1
 
         return None

@@ -15,7 +15,7 @@ class TableView(QTableView):
     
 
     def check_column(self, index):
-        if index.column() == len(self.model().metadata["columns"]):
+        if index.column() == len(self.model().metadata["columns"])+1:
             self.delete_row(index.row())
 
     def contextMenuEvent(self, event):

@@ -28,15 +28,17 @@ class TableModel(QAbstractTableModel):
         return len(self.displayed_d)
 
     def columnCount(self, index):
-        return len(self.metadata["columns"])+1
+        return len(self.metadata["columns"])+2
 
     def data(self, index, role):
         if role == QtCore.Qt.DisplayRole:
             data = self.get_element(index)
             i = 0
 
-            for i in range(len(self.metadata["columns"])+1):
+            for i in range(len(self.metadata["columns"])+2):
                 if index.column() == len(self.metadata["columns"]) and role == QtCore.Qt.DisplayRole:
+                    return "connect"
+                if index.column() == len(self.metadata["columns"])+1 and role == QtCore.Qt.DisplayRole:
                     return "remove"
                 if index.column() == i and role == QtCore.Qt.DisplayRole:
                     return data[self.metadata["columns"][i]]

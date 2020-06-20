@@ -2,7 +2,7 @@
     "search key": "name",
     "representing key": "id",
     "columns": ["name", "espb_points", "duration", "postgraduation_title"],
-    "handler type": "serial",
+    "handler type": "sequential",
     "additional tab name": "students",
     "linked file": "students",
     "subtable columns": ["student_index",

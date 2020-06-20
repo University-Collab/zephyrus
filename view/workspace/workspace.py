@@ -1,7 +1,7 @@
 import json, pickle
 from PySide2.QtWidgets import (QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QStackedLayout, QTabWidget,
                                QTableView, QAbstractItemView, QLineEdit, QMenu,
-                               QAction, QSizePolicy, QLineEdit, QComboBox, QListWidget, QToolBar)
+                               QAction, QSizePolicy, QLineEdit, QComboBox, QListWidget, QToolBar, QMessageBox)
                                
 from PySide2 import QtGui
 from PySide2.QtGui import QIcon
@@ -41,11 +41,12 @@ class Workspace(QWidget):
         # package
         self.package = QVBoxLayout()
         
-        self.comboWidget = QComboBox()
+        self.toolBar = QToolBar()
+        self.toolBar.setMovable(True)
         
-        self.comboWidget.insertItem(0, "None chosen")
-        self.comboWidget.insertItem(1, "Manage Data")
-        self.comboWidget.insertItem(2, "Add Data")
+        self.toolBar.addAction(QIcon("view/images/list_48px.png"), "Manage Data")
+        self.toolBar.addAction(QIcon("view/images/add_new_40px.png"), "Add Data")
+        self.toolBar.addAction(QIcon("view/images/close_window_26px.png"), "Close")
         # manage data
         self.manageData = ManageData(self.main_table)
         # add data
@@ -59,9 +60,9 @@ class Workspace(QWidget):
         self.stackedLayout.addWidget(self.addData)
         self.stackedLayout.setCurrentIndex(0)
 
-        self.comboWidget.activated.connect(self.stackedLayout.setCurrentIndex)
+        self.toolBar.actionTriggered.connect(self.setStackedLayout)
 
-        self.package.addWidget(self.comboWidget)
+        self.package.addWidget(self.toolBar)
         self.package.addLayout(self.stackedLayout)
         self.package.addWidget(self.main_table)
         
@@ -70,91 +71,138 @@ class Workspace(QWidget):
      
         self.setLayout(self.main_layout)
 
+    def setStackedLayout(self, action):
+        if action.iconText() == "Manage Data":
+            self.stackedLayout.setCurrentIndex(1)
+        
+        elif action.iconText() == "Add Data":
+            self.stackedLayout.setCurrentIndex(2)
 
+        elif action.iconText() == "Close":
+            self.stackedLayout.setCurrentIndex(0)
 
-    def handler_type_check(self):
+    def set_paths(self):
         self.subtable_path = self.file_path.split("storage/")[0] + "storage/" + self.meta_data["linked file"]
         self.subtable_meta_path = self.file_path.split("storage/")[0] + "meta/" + self.meta_data["linked file"] + "_metadata.json"
-        with open(self.subtable_meta_path, "r") as meta_data:
-            data = json.load(meta_data)
-            if data["handler type"] == "serial":
-                return "serial"
-            else:
-                return "sequential"
+        # with open(self.subtable_meta_path, "r") as meta_data:
+        #     data = json.load(meta_data)
+        #     if data["handler type"] == "serial":
+        #         return "serial"
+        #     else:
+        #         return "sequential"
 
-    def create_model(self):
+    def create_model(self): 
         temp = self.file_path.split("storage/")
         self.meta_path = temp[0] + "meta/" + temp[1].split(
             ".")[0] + "_metadata.json"
         with open(self.meta_path) as metadata:
             data = json.load(metadata)
             self.meta_data = data
-            self.handler_type = data["handler type"]
 
-        if self.handler_type == "serial":
+        handler = QMessageBox()
+        handler.setWindowTitle("Action Dialog")
+        handler.setText("Is there a need for fast sequential file handling?")
+        handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+        handler.setDefaultButton(QMessageBox.No)
+        user_reply = handler.exec_()
+
+        if user_reply == QMessageBox.No:
             self.handler = SerialDataHandler(self.file_path, self.meta_path)
             self.table_model = TableModel(self.handler)
             self.main_table.setModel(self.table_model)
 
-        if self.handler_type == "sequential":
+        if user_reply == QMessageBox.Yes:
             self.handler = SequentialDataHandler(self.file_path,
-                                                 self.meta_path)
+                                                self.meta_path)
             self.table_model = TableModel(self.handler)
             self.main_table.setModel(self.table_model)
 
     def row_selected(self, index):
 
         
+    
         if index.column() == len(self.main_table.model().metadata["columns"]):
-            return 
 
-        model = self.main_table.model()
-        selected_data = model.get_element(index)
 
-        type = self.handler_type_check()
-        unique_data = selected_data[self.meta_data["search key"]]
+            model = self.main_table.model()
+            selected_data = model.get_element(index)
 
-        if type == "serial":
-            subtable_model = TableModel(
-                SerialDataHandler(self.subtable_path, self.subtable_meta_path,
-                                  unique_data))
-        else:
-            subtable_model = TableModel(
-                SequentialDataHandler(self.file_path, self.meta_path,
-                                      unique_data))
+            self.set_paths()
+            unique_data = selected_data[self.meta_data["search key"]]
+            # print(unique_data)
+            
 
-        subtable = TableView(self.tab_widget)
-        subtable.setModel(subtable_model)
+            handler = QMessageBox()
+            handler.setWindowTitle("Action Dialog")
+            handler.setText("Is there a need for fast sequential file handling?")
+            handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+            handler.setDefaultButton(QMessageBox.No)
+            user_reply = handler.exec_()
 
-        # package
-        package = QVBoxLayout()
+            if user_reply == QMessageBox.No:
+                subtable_model = TableModel(
+                    SerialDataHandler(self.subtable_path, self.subtable_meta_path,
+                                    unique_data))
+
+            if user_reply == QMessageBox.Yes:
+                subtable_model = TableModel(
+                    SequentialDataHandler(self.subtable_path, self.subtable_meta_path,
+                                        unique_data))
+
+            # if type == "serial":
+            #     subtable_model = TableModel(
+            #         SerialDataHandler(self.subtable_path, self.subtable_meta_path,
+            #                           unique_data))
+            # else:
+            #     subtable_model = TableModel(
+            #         SequentialDataHandler(self.file_path, self.meta_path,
+            #                               unique_data))
+
+            subtable = TableView(self.tab_widget)
+            subtable.setModel(subtable_model)
+
+            # package
+            package = QVBoxLayout()
+
+            toolBar = QToolBar()
+            toolBar.setMovable(True)
+            
+            toolBar.addAction(QIcon("view/images/list_48px.png"), "Manage Data")
+            toolBar.addAction(QIcon("view/images/add_new_40px.png"), "Add Data")
+            toolBar.addAction(QIcon("view/images/close_window_26px.png"), "Close")
+
+            # manage data
+            manageData = ManageData(subtable)
+            # add data
+            addData = AddData(subtable)
+            # stacked layer
+            self.stackedLayout2 = QStackedLayout()
+            self.stackedLayout2.addWidget(self.label)
+            self.stackedLayout2.addWidget(manageData)
+            self.stackedLayout2.addWidget(addData)
+            self.stackedLayout2.setCurrentIndex(0)
+
+            toolBar.actionTriggered.connect(self.setStackedLayout2)
+
+            package.addWidget(toolBar)
+            package.addLayout(self.stackedLayout2)
+            package.addWidget(subtable)
+
+            widg_ = QWidget()
+            widg_.setLayout(package)
+
+            self.tab_widget.addTab(widg_, self.meta_data["additional tab name"])
+            self.main_layout.addWidget(self.tab_widget)
+
+    def setStackedLayout2(self, action):
+        if action.iconText() == "Manage Data":
+            self.stackedLayout2.setCurrentIndex(1)
         
-        comboWidget = QComboBox()
-        comboWidget.insertItem(0, "None choosen.")
-        comboWidget.insertItem(1, "Manage Data")
-        comboWidget.insertItem(2, "Add Data")
-        # manage data
-        manageData = ManageData(subtable)
-        # add data
-        addData = AddData(subtable)
-        # stacked layer
-        stackedLayout = QStackedLayout()
-        stackedLayout.addWidget(self.label)
-        stackedLayout.addWidget(manageData)
-        stackedLayout.addWidget(addData)
-        stackedLayout.setCurrentIndex(0)
+        elif action.iconText() == "Add Data":
+            self.stackedLayout2.setCurrentIndex(2)
 
-        comboWidget.activated.connect(stackedLayout.setCurrentIndex)
-
-        package.addWidget(comboWidget)
-        package.addLayout(stackedLayout)
-        package.addWidget(subtable)
-
-        widg_ = QWidget()
-        widg_.setLayout(package)
-
-        self.tab_widget.addTab(widg_, self.meta_data["additional tab name"])
-        self.main_layout.addWidget(self.tab_widget)
+        elif action.iconText() == "Close":
+            self.stackedLayout2.setCurrentIndex(0)
 
     def create_tab_widget(self):
         self.tab_widget = QTabWidget()

@@ -4,7 +4,7 @@ from view.connect_database.connect_database import ConnectDatabase
 
 
 class Toolbar(QToolBar):
-    def __init__(self, title=None, parent=None):
+    def __init__(self, title=None, parent=None, dock=None):
         QToolBar.__init__(self, title, parent)
         self.connect_db = ConnectDatabase(parent)
         self.init_toolbar_buttons()

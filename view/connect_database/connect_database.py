@@ -1,7 +1,6 @@
 import pickle, os
 import pymysql as mysql
 from PySide2.QtWidgets import QDialog, QLineEdit, QPushButton, QGridLayout, QLabel, QMessageBox
-from controller.db_handler.db_handler import DBHandler
 
 class ConnectDatabase(QDialog):
     def __init__(self, parent):
@@ -52,11 +51,6 @@ class ConnectDatabase(QDialog):
         self.show()
 
     def connect(self):
-        # Just for testing DELETE
-        print(
-            f'User: {self.user.text()}\nPassword: {self.password.text()}\nDB name: {self.db_name.text()}\nHost Name: {self.host_name.text()}'
-        )
-
         if os.path.getsize("model/session/connected_dbs") > 0:
             with open("model/session/connected_dbs", "rb") as sessions:
                 db_sessions = pickle.load(sessions)
@@ -90,10 +84,9 @@ class ConnectDatabase(QDialog):
                     cursorclass=mysql.cursors.DictCursor
                 )
 
-                print("\nConnected successfully\n")
-
                 db_sessions.append(
                     {
+                        "index": len(db_sessions) + 1,
                         "host": self.host_name.text(),
                         "user": self.user.text(),
                         "password": self.password.text(),
@@ -111,6 +104,8 @@ class ConnectDatabase(QDialog):
 
                 with open("model/session/connected_dbs", "wb") as sessions:
                     pickle.dump(db_sessions, sessions)
+
+                self.close()
 
             except mysql.Error as e:
                 print(f'\nDB Error: {e.args[1]}\n')

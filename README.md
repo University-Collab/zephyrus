@@ -8,3 +8,5 @@ Zephyrus is a sophomore university project :hammer: by **Nikola Lausev** and **D
 ## Getting Started
 1. Install dependencies either by running `pipenv install` or `pip install -r requirements.txt`
 2. Run command `python main.py`
+
+(**Hint**: You can find a database example [here](https://github.com/University-Collab/zephyrus/tree/master/model/db_examples))

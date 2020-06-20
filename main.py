@@ -1,5 +1,5 @@
 import sys
-from PySide2.QtWidgets import QApplication, QMainWindow
+from PySide2.QtWidgets import QApplication, QMainWindow, QAction
 from PySide2.QtGui import QIcon
 from PySide2.QtCore import Qt
 
@@ -37,10 +37,25 @@ if __name__ == "__main__":
     window.setStatusBar(status_bar)
 
     dock = Dock("File Explorer", central_widget, window)
+    dock.tree_init()
     window.addDockWidget(Qt.LeftDockWidgetArea, dock)
     toggle_dock_action = dock.toggleViewAction()
     toggle_dock_action.setShortcut("Ctrl+B")
     menubar.view_menu.addAction(toggle_dock_action)
+
+    dock_db = Dock("Connected Databases", central_widget, window)
+    dock_db.list_init()
+    window.addDockWidget(Qt.LeftDockWidgetArea, dock_db)
+    toggle_connected_dbs_action = dock_db.toggleViewAction()
+    toggle_connected_dbs_action.setShortcut("Ctrl+D")
+    
+    refresh_action = QAction(QIcon("view/images/menubar/refresh.png"), "Refresh Connected DBs", dock_db)
+    refresh_action.setShortcut("Ctrl+R")
+    refresh_action.setStatusTip("Refreshes list of connected databases in the dock")
+    refresh_action.triggered.connect(dock_db.connected_dbs)
+    
+    menubar.tools_menu.addAction(refresh_action)
+    menubar.view_menu.addAction(toggle_connected_dbs_action)
 
     window.showMaximized()
 

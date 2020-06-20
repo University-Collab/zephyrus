@@ -1,8 +1,0 @@
-{
-  "search key": "city",
-  "columns": ["firm name", "employee number", "profit"],
-  "handler type": "serial",
-  "linked file": "countries",
-  "additional tab name": "countries",
-  "subtable columns": ["country", "city"]
-}

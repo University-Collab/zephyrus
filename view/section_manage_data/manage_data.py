@@ -8,18 +8,17 @@ class ManageData(QWidget):
         super().__init__(parent)
         self.table = referenced_table
 
-        # for search
         self.search_layout = QHBoxLayout()
-        # search - tekst
+
         self.search_text = QLabel()
         self.search_text.setText("Search Table: ")
-        # search - input
+
         self.input_field = QLineEdit()
-        # self.input_field.setStyleSheet("width: 200") 
+
         self.input_field.setPlaceholderText("Type field value...")
         self.input_field.textChanged.connect(self.search_table)
         self.input_field.returnPressed.connect(self.search_table)
-        # search - options
+
         self.combo_text = QLabel("Search by column: ")
         self.combo_options = QComboBox()
         self.combo_options.insertItem(0, "None chosen")

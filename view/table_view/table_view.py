@@ -13,7 +13,6 @@ class TableView(QTableView):
         self.column = 0
         self.clicked.connect(self.check_column)
     
-
     def check_column(self, index):
         if index.column() == len(self.model().metadata["columns"])+1:
             self.delete_row(index.row())

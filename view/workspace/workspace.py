@@ -31,27 +31,25 @@ class Workspace(QWidget):
         self.meta_data = None
         self.create_tab_widget()
 
-        # for table
         self.main_table = TableView(self.tab_widget)
         self.main_table.setSelectionMode(QAbstractItemView.SingleSelection)
         self.main_table.setSelectionBehavior(QAbstractItemView.SelectRows)
         self.create_model()
         self.main_table.clicked.connect(self.row_selected)
 
-        # package
         self.package = QVBoxLayout()
         
         self.toolBar = QToolBar()
         self.toolBar.setMovable(True)
         
-        self.toolBar.addAction(QIcon("view/images/list_48px.png"), "Manage Data")
-        self.toolBar.addAction(QIcon("view/images/add_new_40px.png"), "Add Data")
-        self.toolBar.addAction(QIcon("view/images/close_window_26px.png"), "Close")
-        # manage data
+        self.toolBar.addAction(QIcon("view/images/toolbar/list_48px.png"), "Manage Data")
+        self.toolBar.addAction(QIcon("view/images/toolbar/add_new_40px.png"), "Add Data")
+        self.toolBar.addAction(QIcon("view/images/toolbar/close_window_26px.png"), "Close")
+
         self.manageData = ManageData(self.main_table)
-        # add data
+
         self.addData = AddData(self.main_table)
-        # stacked layer
+
         self.stackedLayout = QStackedLayout()
         self.label = QLabel()
         self.label.setText("Work with data, choose state.")
@@ -66,7 +64,6 @@ class Workspace(QWidget):
         self.package.addLayout(self.stackedLayout)
         self.package.addWidget(self.main_table)
         
-
         self.main_layout.addLayout(self.package)
      
         self.setLayout(self.main_layout)
@@ -84,12 +81,6 @@ class Workspace(QWidget):
     def set_paths(self):
         self.subtable_path = self.file_path.split("storage/")[0] + "storage/" + self.meta_data["linked file"]
         self.subtable_meta_path = self.file_path.split("storage/")[0] + "meta/" + self.meta_data["linked file"] + "_metadata.json"
-        # with open(self.subtable_meta_path, "r") as meta_data:
-        #     data = json.load(meta_data)
-        #     if data["handler type"] == "serial":
-        #         return "serial"
-        #     else:
-        #         return "sequential"
 
     def create_model(self): 
         temp = self.file_path.split("storage/")
@@ -100,7 +91,7 @@ class Workspace(QWidget):
             self.meta_data = data
 
         handler = QMessageBox()
-        handler.setWindowTitle("Action Dialog")
+        handler.setWindowTitle("Need for speed?")
         handler.setText("Is there a need for fast sequential file handling?")
         handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
         handler.setDefaultButton(QMessageBox.No)
@@ -118,22 +109,16 @@ class Workspace(QWidget):
             self.main_table.setModel(self.table_model)
 
     def row_selected(self, index):
-
-        
-    
         if index.column() == len(self.main_table.model().metadata["columns"]):
-
 
             model = self.main_table.model()
             selected_data = model.get_element(index)
 
             self.set_paths()
-            unique_data = selected_data[self.meta_data["search key"]]
-            # print(unique_data)
-            
+            unique_data = selected_data[self.meta_data["search key"]]            
 
             handler = QMessageBox()
-            handler.setWindowTitle("Action Dialog")
+            handler.setWindowTitle("Need for speed?")
             handler.setText("Is there a need for fast sequential file handling?")
             handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
             handler.setDefaultButton(QMessageBox.No)
@@ -149,19 +134,9 @@ class Workspace(QWidget):
                     SequentialDataHandler(self.subtable_path, self.subtable_meta_path,
                                         unique_data))
 
-            # if type == "serial":
-            #     subtable_model = TableModel(
-            #         SerialDataHandler(self.subtable_path, self.subtable_meta_path,
-            #                           unique_data))
-            # else:
-            #     subtable_model = TableModel(
-            #         SequentialDataHandler(self.file_path, self.meta_path,
-            #                               unique_data))
-
             subtable = TableView(self.tab_widget)
             subtable.setModel(subtable_model)
 
-            # package
             package = QVBoxLayout()
 
             toolBar = QToolBar()
@@ -171,11 +146,10 @@ class Workspace(QWidget):
             toolBar.addAction(QIcon("view/images/add_new_40px.png"), "Add Data")
             toolBar.addAction(QIcon("view/images/close_window_26px.png"), "Close")
 
-            # manage data
             manageData = ManageData(subtable)
-            # add data
+
             addData = AddData(subtable)
-            # stacked layer
+
             self.stackedLayout2 = QStackedLayout()
             self.stackedLayout2.addWidget(self.label)
             self.stackedLayout2.addWidget(manageData)

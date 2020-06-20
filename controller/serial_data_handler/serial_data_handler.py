@@ -27,7 +27,6 @@ class SerialDataHandler(DataHandler):
                 for obj in loaded_data:
                     if obj[self.search_key] == self.unique_data:
                         self.data.append(obj)
-                # print(self.data)
             else:
                 self.data = loaded_data
                 

@@ -51,4 +51,4 @@ class DBTableDialog(QDialog):
     def table_selected(self):
         if self.tables.currentItem().text() is not None:
             db_handler = DBHandler(self.db, self.tables.currentItem().text())
-            db_handler.load_data() # test
+            db_handler.load_data() # testing

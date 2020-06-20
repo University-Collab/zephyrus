@@ -3,6 +3,10 @@ import pymysql as mysql
 from controller.data_handler.data_handler import DataHandler
 
 
+"""
+Database handler isn't finished yet and is still prone to bugs
+"""
+
 class DBHandler(DataHandler):
     def __init__(self, db, table):
         super().__init__()
@@ -15,24 +19,6 @@ class DBHandler(DataHandler):
         self.host = None
 
         self.load_sessions()
-
-    def get_one(self, id):
-        connection = mysql.connect(
-            host=self.host,
-            user=self.user,
-            password=self.password,
-            db=self.db,
-            charset="utf8mb4",
-            cursorclass=mysql.cursors.DictCursor
-        )
-
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM %s WHERE id = %s", (self.table, id,))
-                self.data = cursor.fetchone()
-        finally:
-            connection.close()
-
 
     def load_sessions(self):
         with open("model/session/connected_dbs", "rb") as sessions:
@@ -62,6 +48,27 @@ class DBHandler(DataHandler):
         finally:
             connection.close()
 
+    def get_one(self, id):
+        connection = mysql.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            db=self.db,
+            charset="utf8mb4",
+            cursorclass=mysql.cursors.DictCursor
+        )
+
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("SELECT * FROM %s WHERE id = %s", (self.table, id,))
+                self.data = cursor.fetchone()
+            if len(self.data) == 0:
+                return None
+            else:
+                return self.data
+        finally:
+            connection.close()
+
     def get_all(self):
         connection = mysql.connect(
             host=self.host,
@@ -76,6 +83,7 @@ class DBHandler(DataHandler):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM %s", (self.table,))
                 self.data = cursor.fetchall()
+            return self.data
         finally:
             connection.close()
 

@@ -9,18 +9,16 @@ class AddData(QWidget):
         self.table = referenced_table
         self.layout = QVBoxLayout()
 
-        # for search
         self.search_layout = QHBoxLayout()
-        # search - tekst
+
         self.search_text = QLabel()
         self.search_text.setText("Search Table: ")
-        # search - input
+
         self.input_field = QLineEdit()
-        # self.input_field.setStyleSheet("width: 200") 
         self.input_field.setPlaceholderText("Type field value...")
         self.input_field.textChanged.connect(self.search_table)
         self.input_field.returnPressed.connect(self.search_table)
-        # search - options
+
         self.combo_text = QLabel("Search by column: ")
         self.combo_options = QComboBox()
         self.combo_options.insertItem(0, "None chosen")
@@ -30,7 +28,6 @@ class AddData(QWidget):
         self.search_layout.addWidget(self.input_field)
         self.search_layout.addWidget(self.combo_text)
         self.search_layout.addWidget(self.combo_options)
-
 
         self.form = QFormLayout()
         for column in self.table.model().metadata['columns']:
@@ -42,7 +39,6 @@ class AddData(QWidget):
         self.form.addWidget(self.button)
         self.form.addWidget(self.fresh_button)
         self.fresh_button.setVisible(False)
-    
 
         self.layout.addLayout(self.search_layout)
         self.layout.addLayout(self.form)
@@ -72,7 +68,6 @@ class AddData(QWidget):
         for column in list_of_columns:
             i += 1
             self.combo_options.insertItem(i, column)
-
 
     def search_table(self, line=None):
         if line==None:

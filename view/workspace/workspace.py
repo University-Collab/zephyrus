@@ -41,42 +41,63 @@ class Workspace(QWidget):
         
         self.toolBar = QToolBar()
         self.toolBar.setMovable(True)
+
+        self.up = QAction(QIcon("view/images/toolbar/baseline_expand_less_black_48dp.png"), "Up", self.main_table)
+        self.up.setStatusTip("Move one up")
+        self.up.triggered.connect(self.jump_up)
+
+        self.down = QAction(QIcon("view/images/toolbar/baseline_expand_more_black_48dp.png"), "Down", self.main_table)
+        self.down.setStatusTip("Move one down")
+        self.down.triggered.connect(self.jump_down)
+
+        self.first = QAction(QIcon("view/images/toolbar/baseline_first_page_black_48dp.png"), "Jump to first", self.main_table)
+        self.first.setStatusTip("Jump to first")
+        self.first.triggered.connect(self.jump_to_first)
+
+        self.last = QAction(QIcon("view/images/toolbar/baseline_last_page_black_48dp.png"), "Jump to last", self.main_table)
+        self.last.setStatusTip("Jump to last")
+        self.last.triggered.connect(self.jump_to_last)
         
         self.toolBar.addAction(QIcon("view/images/toolbar/list_48px.png"), "Manage Data")
         self.toolBar.addAction(QIcon("view/images/toolbar/add_new_40px.png"), "Add Data")
+        self.toolBar.addAction(self.first)
+        self.toolBar.addAction(self.up)
+        self.toolBar.addAction(self.down)
+        self.toolBar.addAction(self.last)
         self.toolBar.addAction(QIcon("view/images/toolbar/close_window_26px.png"), "Close")
 
         self.manageData = ManageData(self.main_table)
-
         self.addData = AddData(self.main_table)
 
-        self.stackedLayout = QStackedLayout()
+        self.stacked_layout = QStackedLayout()
         self.label = QLabel()
         self.label.setText("Work with data, choose state.")
-        self.stackedLayout.addWidget(self.label)
-        self.stackedLayout.addWidget(self.manageData)
-        self.stackedLayout.addWidget(self.addData)
-        self.stackedLayout.setCurrentIndex(0)
+        self.stacked_layout.addWidget(self.label)
+        self.stacked_layout.addWidget(self.manageData)
+        self.stacked_layout.addWidget(self.addData)
+        self.stacked_layout.setCurrentIndex(0)
 
-        self.toolBar.actionTriggered.connect(self.setStackedLayout)
+        self.toolBar.actionTriggered.connect(self.toolbar_actions)
 
         self.package.addWidget(self.toolBar)
-        self.package.addLayout(self.stackedLayout)
+        self.package.addLayout(self.stacked_layout)
         self.package.addWidget(self.main_table)
         
         self.main_layout.addLayout(self.package)
+
+        self.selected_row = 0
      
         self.setLayout(self.main_layout)
 
-    def setStackedLayout(self, action):
+    def toolbar_actions(self, action):
         if action.iconText() == "Manage Data":
-            self.stackedLayout.setCurrentIndex(1)
+            self.stacked_layout.setCurrentIndex(1)
         
         elif action.iconText() == "Add Data":
-            self.stackedLayout.setCurrentIndex(2)
+            self.stacked_layout.setCurrentIndex(2)
 
         elif action.iconText() == "Close":
-            self.stackedLayout.setCurrentIndex(0)
+            self.stacked_layout.setCurrentIndex(0)    
 
     def set_paths(self):
         self.subtable_path = self.file_path.split("storage/")[0] + "storage/" + self.meta_data["linked file"]
@@ -109,10 +130,12 @@ class Workspace(QWidget):
             self.main_table.setModel(self.table_model)
 
     def row_selected(self, index):
-        if index.column() == len(self.main_table.model().metadata["columns"]):
+        if index.column() <= len(self.main_table.model().metadata["columns"]):
 
             model = self.main_table.model()
             selected_data = model.get_element(index)
+
+            self.selected_row = index.row()
 
             self.set_paths()
             unique_data = selected_data[self.meta_data["search key"]]            
@@ -134,33 +157,53 @@ class Workspace(QWidget):
                     SequentialDataHandler(self.subtable_path, self.subtable_meta_path,
                                         unique_data))
 
-            subtable = TableView(self.tab_widget)
-            subtable.setModel(subtable_model)
+            self.subtable = TableView(self.tab_widget)
+            self.subtable.setModel(subtable_model)
 
             package = QVBoxLayout()
 
             toolBar = QToolBar()
             toolBar.setMovable(True)
+
+            sub_up = QAction(QIcon("view/images/toolbar/baseline_expand_less_black_48dp.png"), "Up", self.subtable)
+            sub_up.setStatusTip("Move one up")
+            sub_up.triggered.connect(self.sub_up)
+
+            sub_down = QAction(QIcon("view/images/toolbar/baseline_expand_more_black_48dp.png"), "Down", self.subtable)
+            sub_down.setStatusTip("Move one down")
+            sub_down.triggered.connect(self.sub_down)
+
+            sub_first = QAction(QIcon("view/images/toolbar/baseline_first_page_black_48dp.png"), "Jump to first", self.subtable)
+            sub_first.setStatusTip("Jump to first")
+            sub_first.triggered.connect(self.sub_first)
+
+            sub_last = QAction(QIcon("view/images/toolbar/baseline_last_page_black_48dp.png"), "Jump to last", self.subtable)
+            sub_last.setStatusTip("Jump to last")
+            sub_last.triggered.connect(self.sub_last)
             
-            toolBar.addAction(QIcon("view/images/list_48px.png"), "Manage Data")
-            toolBar.addAction(QIcon("view/images/add_new_40px.png"), "Add Data")
-            toolBar.addAction(QIcon("view/images/close_window_26px.png"), "Close")
+            toolBar.addAction(QIcon("view/images/toolbar/list_48px.png"), "Manage Data")
+            toolBar.addAction(QIcon("view/images/toolbar/add_new_40px.png"), "Add Data")
+            toolBar.addAction(sub_first)
+            toolBar.addAction(sub_up)
+            toolBar.addAction(sub_down)
+            toolBar.addAction(sub_last)
+            toolBar.addAction(QIcon("view/images/toolbar/close_window_26px.png"), "Close")
 
-            manageData = ManageData(subtable)
+            manageData = ManageData(self.subtable)
 
-            addData = AddData(subtable)
+            addData = AddData(self.subtable)
 
-            self.stackedLayout2 = QStackedLayout()
-            self.stackedLayout2.addWidget(self.label)
-            self.stackedLayout2.addWidget(manageData)
-            self.stackedLayout2.addWidget(addData)
-            self.stackedLayout2.setCurrentIndex(0)
+            self.stacked_layout_2 = QStackedLayout()
+            self.stacked_layout_2.addWidget(self.label)
+            self.stacked_layout_2.addWidget(manageData)
+            self.stacked_layout_2.addWidget(addData)
+            self.stacked_layout_2.setCurrentIndex(0)
 
-            toolBar.actionTriggered.connect(self.setStackedLayout2)
+            toolBar.actionTriggered.connect(self.sub_toolbar_actions)
 
             package.addWidget(toolBar)
-            package.addLayout(self.stackedLayout2)
-            package.addWidget(subtable)
+            package.addLayout(self.stacked_layout_2)
+            package.addWidget(self.subtable)
 
             widg_ = QWidget()
             widg_.setLayout(package)
@@ -168,15 +211,15 @@ class Workspace(QWidget):
             self.tab_widget.addTab(widg_, self.meta_data["additional tab name"])
             self.main_layout.addWidget(self.tab_widget)
 
-    def setStackedLayout2(self, action):
+    def sub_toolbar_actions(self, action):
         if action.iconText() == "Manage Data":
-            self.stackedLayout2.setCurrentIndex(1)
+            self.stacked_layout_2.setCurrentIndex(1)
         
         elif action.iconText() == "Add Data":
-            self.stackedLayout2.setCurrentIndex(2)
+            self.stacked_layout_2.setCurrentIndex(2)
 
         elif action.iconText() == "Close":
-            self.stackedLayout2.setCurrentIndex(0)
+            self.stacked_layout_2.setCurrentIndex(0)
 
     def create_tab_widget(self):
         self.tab_widget = QTabWidget()
@@ -185,4 +228,43 @@ class Workspace(QWidget):
 
     def delete_tab(self, index):
         self.tab_widget.removeTab(index)
+
+    """
+    Table navigation jumps
+    """
+    def jump_up(self):
+        if self.selected_row != 0:
+            self.selected_row -= 1
+            self.main_table.selectRow(self.selected_row)
+
+    def jump_down(self):
+        if self.selected_row < len(self.main_table.model().displayed_d) - 1:
+            self.selected_row += 1
+            self.main_table.selectRow(self.selected_row)
+
+    def jump_to_first(self):
+        self.selected_row = 0
+        self.main_table.selectRow(self.selected_row)
+
+    def jump_to_last(self):
+        self.selected_row = len(self.main_table.model().displayed_d) - 1
+        self.main_table.selectRow(self.selected_row)
+
+    def sub_up(self):
+        if self.selected_row != 0:
+            self.selected_row -= 1
+            self.subtable.selectRow(self.selected_row)
+
+    def sub_down(self):
+        if self.selected_row < len(self.subtable.model().displayed_d) - 1:
+            self.selected_row += 1
+            self.subtable.selectRow(self.selected_row)
+
+    def sub_first(self):
+        self.selected_row = 0
+        self.subtable.selectRow(self.selected_row)
+
+    def sub_last(self):
+        self.selected_row = len(self.subtable.model().displayed_d) - 1
+        self.subtable.selectRow(self.selected_row)
 

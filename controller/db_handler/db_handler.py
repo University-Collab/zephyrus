@@ -31,22 +31,7 @@ class DBHandler(DataHandler):
                 self.host = session["host"]
 
     def load_data(self):
-        connection = mysql.connect(
-            host=self.host,
-            user=self.user,
-            password=self.password,
-            db=self.db,
-            charset="utf8mb4",
-            cursorclass=mysql.cursors.DictCursor
-        )
-
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM %s", (self.table,))
-                self.data = cursor.fetchall()
-            print(self.data)
-        finally:
-            connection.close()
+        self.get_all()
 
     def get_one(self, id):
         connection = mysql.connect(
@@ -60,7 +45,7 @@ class DBHandler(DataHandler):
 
         try:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM %s WHERE id = %s", (self.table, id,))
+                cursor.execute("SELECT * FROM " + self.table + " WHERE id = " + id)
                 self.data = cursor.fetchone()
             if len(self.data) == 0:
                 return None
@@ -81,9 +66,9 @@ class DBHandler(DataHandler):
 
         try:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM %s", (self.table,))
+                cursor.execute("SELECT * FROM " + self.table)
                 self.data = cursor.fetchall()
-            return self.data
+            print(self.data)
         finally:
             connection.close()
 
@@ -116,13 +101,27 @@ class DBHandler(DataHandler):
 
         try:
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM %s WHERE id = %s", (self.table, id,))
+                cursor.execute("DELETE FROM " + self.table + " WHERE id = " + id)
                 connection.commit()
         finally:
             connection.close()
 
     def insert(self, obj):
-        pass
+        connection = mysql.connect(
+            host=self.host,
+            user=self.user,
+            password=self.password,
+            db=self.db,
+            charset="utf8mb4",
+            cursorclass=mysql.cursors.DictCursor
+        )
+
+        try:
+            with connection.cursor() as cursor:
+                cursor.execute("INSERT INTO " + self.table + " VALUES " + "(" + obj + ")")
+                connection.commit()
+        finally:
+            connection.close()
 
     def save(self, data, parent_table=False, sub_table=False):
         pass

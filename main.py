@@ -44,7 +44,7 @@ if __name__ == "__main__":
     menubar.view_menu.addAction(toggle_dock_action)
 
     dock_db = Dock("Connected Databases", central_widget, window)
-    dock_db.list_init()
+    dock_db.init_db_tree()
     window.addDockWidget(Qt.LeftDockWidgetArea, dock_db)
     toggle_connected_dbs_action = dock_db.toggleViewAction()
     toggle_connected_dbs_action.setShortcut("Ctrl+D")

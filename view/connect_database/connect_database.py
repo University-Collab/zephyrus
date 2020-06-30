@@ -5,26 +5,26 @@ from PySide2.QtWidgets import QDialog, QLineEdit, QPushButton, QGridLayout, QLab
 class ConnectDatabase(QDialog):
     def __init__(self, parent):
         super().__init__(parent)
-        self.user = None
-        self.password = None
-        self.db_name = None
-        self.host_name = None
 
     def display_dialog(self):
         self.setWindowTitle("Connect Database")
 
         self.user_label = QLabel("Database User:")
         self.user = QLineEdit()
+        self.user.setClearButtonEnabled(True)
 
         self.pw_label = QLabel("Database Password:")
         self.password = QLineEdit()
+        self.password.setClearButtonEnabled(True)
         self.password.setEchoMode(QLineEdit.Password)
 
         self.db_name_label = QLabel("Database Name:")
         self.db_name = QLineEdit()
+        self.db_name.setClearButtonEnabled(True)
 
         self.host_name_label = QLabel("Host Name:")
         self.host_name = QLineEdit()
+        self.host_name.setClearButtonEnabled(True)
         
         self.connect_bttn = QPushButton("Connect")
         self.connect_bttn.clicked.connect(self.connect)
@@ -74,8 +74,7 @@ class ConnectDatabase(QDialog):
                 break
 
         if not is_connected:
-            try:
-                connection = mysql.connect(
+            connection = mysql.connect(
                     host=self.host_name.text(),
                     user=self.user.text(),
                     password=self.password.text(),
@@ -83,7 +82,7 @@ class ConnectDatabase(QDialog):
                     charset="utf8mb4",
                     cursorclass=mysql.cursors.DictCursor
                 )
-
+            try:
                 db_sessions.append(
                     {
                         "index": len(db_sessions) + 1,

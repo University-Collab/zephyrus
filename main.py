@@ -54,7 +54,7 @@ if __name__ == "__main__":
     refresh_action.setStatusTip("Refreshes list of connected databases in the dock")
     refresh_action.triggered.connect(dock_db.connected_dbs)
     
-    menubar.tools_menu.addAction(refresh_action)
+    menubar.database_menu.addAction(refresh_action)
     menubar.view_menu.addAction(toggle_connected_dbs_action)
 
     window.showMaximized()

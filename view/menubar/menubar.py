@@ -16,7 +16,7 @@ class Menubar(QMenuBar):
 
         self.file_menu = QMenu("File", self)
         self.edit_menu = QMenu("Edit", self)
-        self.tools_menu = QMenu("Tools", self)
+        self.database_menu = QMenu("Database", self)
         self.view_menu = QMenu("View", self)
         self.help_menu = QMenu("Help", self)
         self.theme_menu = QMenu("Theme", self.view_menu)
@@ -24,7 +24,7 @@ class Menubar(QMenuBar):
         self.addMenu(self.menu_icon)
         self.addMenu(self.file_menu)
         self.addMenu(self.edit_menu)
-        self.addMenu(self.tools_menu)
+        self.addMenu(self.database_menu)
         self.addMenu(self.view_menu)
         self.addMenu(self.help_menu)
         self.view_menu.addMenu(self.theme_menu)

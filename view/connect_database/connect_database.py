@@ -5,25 +5,32 @@ from PySide2.QtWidgets import QDialog, QLineEdit, QPushButton, QGridLayout, QLab
 class ConnectDatabase(QDialog):
     def __init__(self, parent):
         super().__init__(parent)
-
-    def display_dialog(self):
+        
         self.setWindowTitle("Connect Database")
 
         self.user_label = QLabel("Database User:")
         self.user = QLineEdit()
+        self.user.setPlaceholderText("e.g. root")
+        self.user.setDragEnabled(True)
+        self.user.setFocus()
         self.user.setClearButtonEnabled(True)
 
         self.pw_label = QLabel("Database Password:")
         self.password = QLineEdit()
+        self.password.setPlaceholderText("e.g. toor")
         self.password.setClearButtonEnabled(True)
         self.password.setEchoMode(QLineEdit.Password)
 
         self.db_name_label = QLabel("Database Name:")
         self.db_name = QLineEdit()
+        self.db_name.setPlaceholderText("e.g. bank-db")
+        self.db_name.setDragEnabled(True)
         self.db_name.setClearButtonEnabled(True)
 
         self.host_name_label = QLabel("Host Name:")
         self.host_name = QLineEdit()
+        self.host_name.setPlaceholderText("e.g. localhost")
+        self.host_name.setDragEnabled(True)
         self.host_name.setClearButtonEnabled(True)
         
         self.connect_bttn = QPushButton("Connect")
@@ -48,10 +55,8 @@ class ConnectDatabase(QDialog):
         self.setLayout(layout)
         self.setModal(True)
 
-        self.show()
-
     def connect(self):
-        if os.path.getsize("model/session/connected_dbs") > 0:
+        if os.path.exists("model/session/connected_dbs"):
             with open("model/session/connected_dbs", "rb") as sessions:
                 db_sessions = pickle.load(sessions)
         else:
@@ -74,47 +79,48 @@ class ConnectDatabase(QDialog):
                 break
 
         if not is_connected:
-            connection = mysql.connect(
-                    host=self.host_name.text(),
-                    user=self.user.text(),
-                    password=self.password.text(),
-                    db=self.db_name.text(),
-                    charset="utf8mb4",
-                    cursorclass=mysql.cursors.DictCursor
-                )
-            try:
-                db_sessions.append(
-                    {
-                        "index": len(db_sessions) + 1,
-                        "host": self.host_name.text(),
-                        "user": self.user.text(),
-                        "password": self.password.text(),
-                        "db": self.db_name.text()
-                    }
-                )
+            if len(self.user.text()) > 0 and len(self.password.text()) > 0 and len(self.db_name.text()) > 0 and len(self.host_name.text()) > 0:
+                connection = mysql.connect(
+                        host=self.host_name.text(),
+                        user=self.user.text(),
+                        password=self.password.text(),
+                        db=self.db_name.text(),
+                        charset="utf8mb4",
+                        cursorclass=mysql.cursors.DictCursor
+                    )
+                try:
+                    db_sessions.append(
+                        {
+                            "index": len(db_sessions) + 1,
+                            "host": self.host_name.text(),
+                            "user": self.user.text(),
+                            "password": self.password.text(),
+                            "db": self.db_name.text()
+                        }
+                    )
 
-                connected_mssg = QMessageBox(self)
-                connected_mssg.setText("Hooray! Database successfully connected with Zephyrus.")
-                connected_mssg.setStandardButtons(QMessageBox.Ok)
-                connected_mssg.setIcon(QMessageBox.Information)
-                connected_mssg.setWindowTitle("Database connected. You rock!")
-                connected_mssg.setModal(True)
-                connected_mssg.exec()
+                    connected_mssg = QMessageBox(self)
+                    connected_mssg.setText("Hooray! Database successfully connected with Zephyrus.\nYou just have to refresh the sessions now with 'Ctrl+R'")
+                    connected_mssg.setStandardButtons(QMessageBox.Ok)
+                    connected_mssg.setIcon(QMessageBox.Information)
+                    connected_mssg.setWindowTitle("Database connected. You rock!")
+                    connected_mssg.setModal(True)
+                    connected_mssg.exec()
 
-                with open("model/session/connected_dbs", "wb") as sessions:
-                    pickle.dump(db_sessions, sessions)
+                    with open("model/session/connected_dbs", "wb") as sessions:
+                        pickle.dump(db_sessions, sessions)
 
-                self.close()
+                    self.close()
 
-            except mysql.Error as e:
-                print(f'\nDB Error: {e.args[1]}\n')
-                err_mssg = QMessageBox(self)
-                err_mssg.setText("Wrong database credentials, you might be bad at typing...")
-                err_mssg.setStandardButtons(QMessageBox.Close)
-                err_mssg.setIcon(QMessageBox.Critical)
-                err_mssg.setWindowTitle("Database Error")
-                err_mssg.setModal(True)
-                err_mssg.exec()
-            
-            finally:
-                connection.close()
+                except mysql.Error as e:
+                    print(f'\nDB Error: {e.args[1]}\n')
+                    err_mssg = QMessageBox(self)
+                    err_mssg.setText("Wrong database credentials, you might be bad at typing...")
+                    err_mssg.setStandardButtons(QMessageBox.Close)
+                    err_mssg.setIcon(QMessageBox.Critical)
+                    err_mssg.setWindowTitle("Database Error")
+                    err_mssg.setModal(True)
+                    err_mssg.exec()
+                
+                finally:
+                    connection.close()

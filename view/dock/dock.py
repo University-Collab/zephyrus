@@ -36,6 +36,7 @@ class Dock(QDockWidget):
     def init_db_tree(self):
         self.clear_tree()
         self.db_tree.setModel(self.db_model)
+        self.db_tree.clicked.connect(self.table_clicked)
         self.setWidget(self.db_tree)
         self.connected_dbs()
 
@@ -84,7 +85,6 @@ class Dock(QDockWidget):
                     connection.close()
 
                 self.db_root.appendRow(temp_db)
-            self.db_tree.clicked.connect(self.table_clicked)
         else:
             self.clear_tree()
             self.dbs = []
@@ -92,16 +92,15 @@ class Dock(QDockWidget):
             self.db_root.appendRow(no_db)
 
     def table_clicked(self, val):
-        print(f'Table clicked dbs: {self.dbs}')
         self.is_db = False
         if os.path.exists("model/session/connected_dbs") and len(self.dbs) != 0:
             for db in self.dbs:
                 if db == val.data():
                     self.is_db = True
 
-                    remove_choice = QMessageBox.warning(self, "Warning", f'Do you want to remove "{val.data()}" from connected databases?', QMessageBox.Yes | QMessageBox.No)
+                    remove_choice = QMessageBox.question(self.db_tree, "Disconnect Database", f'Do you want to remove "{val.data()}" from connected databases?', QMessageBox.Yes | QMessageBox.No)
 
-                    if remove_choice == QMessageBox.Yes and os.path.exists("model/session/connected_dbs"):
+                    if remove_choice == QMessageBox.Yes:
                         with open("model/session/connected_dbs", "rb") as sessions:
                             db_sessions = pickle.load(sessions)
                 
@@ -113,26 +112,27 @@ class Dock(QDockWidget):
 
                         self.dbs[:] = [db for db in self.dbs if db != val.data()]
 
-                        print(f'Removed val.data() from dbs: {self.dbs}')
-
                         if len(db_sessions) == 0:
                             os.remove("model/session/connected_dbs")
                         else:
                             with open("model/session/connected_dbs", "wb") as sessions:
                                 pickle.dump(db_sessions, sessions)
 
+                        QMessageBox.information(self.db_tree, "(㇏(•̀ᵥᵥ•́)ノ)", f'Database "{val.data()}" successfully disconnected.', QMessageBox.Ok)
+                        self.connected_dbs()
+                        break
+
                     if remove_choice == QMessageBox.No:
-                        print("I don't want to remove")
+                        break
             
             if not self.is_db:
-                print(f'Table selected, not db - dbs: {self.dbs}')
-                user_reply = QMessageBox.question(self, "Answer. Thanks.", f'Do you want to open the "{val.data()}" table?', QMessageBox.Yes | QMessageBox.No)
+                user_reply = QMessageBox.question(self.db_tree, "Answer. Thanks.", f'Do you want to open the "{val.data()}" table?', QMessageBox.Open | QMessageBox.Cancel)
 
-                if user_reply == QMessageBox.No:
+                if user_reply == QMessageBox.Cancel:
                     print("Don't open")
                 
-                if user_reply == QMessageBox.Yes:
-                    print("Open")
+                if user_reply == QMessageBox.Open:
+                    print("Open")   
 
     def clear_tree(self):
         self.db_model.clear()

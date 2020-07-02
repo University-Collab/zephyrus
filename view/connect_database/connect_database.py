@@ -67,15 +67,7 @@ class ConnectDatabase(QDialog):
         for db in db_sessions:
             if db["db"] == self.db_name.text():
                 is_connected = True
-
-                err_mssg = QMessageBox(self)
-                err_mssg.setText("Database with the same name is already connected.")
-                err_mssg.setStandardButtons(QMessageBox.Close)
-                err_mssg.setIcon(QMessageBox.Critical)
-                err_mssg.setWindowTitle("Database Already Connected")
-                err_mssg.setModal(True)
-                err_mssg.exec()
-
+                QMessageBox.critical(self, "Database Already Connected", "Database with the same name is already connected.", QMessageBox.Close)
                 break
 
         if not is_connected:
@@ -99,13 +91,7 @@ class ConnectDatabase(QDialog):
                         }
                     )
 
-                    connected_mssg = QMessageBox(self)
-                    connected_mssg.setText("Hooray! Database successfully connected with Zephyrus.\nYou just have to refresh the sessions now with 'Ctrl+R'")
-                    connected_mssg.setStandardButtons(QMessageBox.Ok)
-                    connected_mssg.setIcon(QMessageBox.Information)
-                    connected_mssg.setWindowTitle("Database connected. You rock!")
-                    connected_mssg.setModal(True)
-                    connected_mssg.exec()
+                    QMessageBox.information(self, "Database connected. You rock!", "Hooray! Database successfully connected with Zephyrus.\n\nHint: Press Ctrl+R to refresh databases", QMessageBox.Ok)
 
                     with open("model/session/connected_dbs", "wb") as sessions:
                         pickle.dump(db_sessions, sessions)
@@ -114,13 +100,8 @@ class ConnectDatabase(QDialog):
 
                 except mysql.Error as e:
                     print(f'\nDB Error: {e.args[1]}\n')
-                    err_mssg = QMessageBox(self)
-                    err_mssg.setText("Wrong database credentials, you might be bad at typing...")
-                    err_mssg.setStandardButtons(QMessageBox.Close)
-                    err_mssg.setIcon(QMessageBox.Critical)
-                    err_mssg.setWindowTitle("Database Error")
-                    err_mssg.setModal(True)
-                    err_mssg.exec()
-                
+                    QMessageBox.critical(self, "Warning", "Wrong database credentials, you might be bad at typing...", QMessageBox.Close)
                 finally:
                     connection.close()
+            else:
+                QMessageBox.critical(self, "Warning", "You didn't fill out all fields!", QMessageBox.Close)

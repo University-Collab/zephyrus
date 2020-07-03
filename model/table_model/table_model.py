@@ -43,7 +43,7 @@ class TableModel(QAbstractTableModel):
         if role == QtCore.Qt.DisplayRole:
             data = self.get_element(index)
             i = 0
-
+        
             for i in range(len(self.metadata["columns"])+2):
                 if index.column() == len(self.metadata["columns"]) and role == QtCore.Qt.DisplayRole:
                     return "connect"

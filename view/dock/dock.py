@@ -4,6 +4,7 @@ from PySide2.QtWidgets import QDockWidget, QFileSystemModel, QTreeView, QLineEdi
 from PySide2.QtGui import QIcon, QStandardItemModel, QStandardItem
 from PySide2.QtCore import QDir, Qt
 from view.workspace.workspace import Workspace
+from view.workspace.db_workspace import DBWorkspace
 from view.db_table_dialog.db_table_dialog import DBTableDialog
 from view.dock.standard_item import StandardItem
 
@@ -129,10 +130,15 @@ class Dock(QDockWidget):
                 user_reply = QMessageBox.question(self.db_tree, "Answer. Thanks.", f'Do you want to open the "{val.data()}" table?', QMessageBox.Open | QMessageBox.Cancel)
 
                 if user_reply == QMessageBox.Cancel:
-                    print("Don't open")
+                    pass
                 
                 if user_reply == QMessageBox.Open:
-                    print("Open")   
+                    workspace = DBWorkspace(val.parent().data() ,val.data(), self.central_widget)
+                    self.central_widget.add_tab(
+                        workspace,
+                        QIcon("view/images/menubar/database-connect.png"),
+                        val.data(),
+                    )
 
     def clear_tree(self):
         self.db_model.clear()

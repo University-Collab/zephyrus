@@ -3,22 +3,20 @@ import pymysql as mysql
 from controller.data_handler.data_handler import DataHandler
 
 
-"""
-Database handler isn't finished yet and is still prone to bugs
-"""
-
 class DBHandler(DataHandler):
     def __init__(self, db, table):
         super().__init__()
         self.db = db
         self.table = table
         self.data = []
+        self.columns = []
         self.db_sessions = []
         self.user = None
         self.password = None
         self.host = None
 
         self.load_sessions()
+        self.load_data()
 
     def load_sessions(self):
         with open("model/session/connected_dbs", "rb") as sessions:
@@ -47,6 +45,12 @@ class DBHandler(DataHandler):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM " + self.table + " WHERE id = " + id)
                 self.data = cursor.fetchone()
+
+                cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema='" + self.db + "'" + " AND " + "table_name='" + self.table + "' WHERE id=" + id)
+                temp = cursor.fetchall()
+                
+                for column in temp:
+                    self.columns.append(column["COLUMN_NAME"])
             if len(self.data) == 0:
                 return None
             else:
@@ -55,6 +59,7 @@ class DBHandler(DataHandler):
             connection.close()
 
     def get_all(self):
+        self.columns = []
         connection = mysql.connect(
             host=self.host,
             user=self.user,
@@ -68,7 +73,12 @@ class DBHandler(DataHandler):
             with connection.cursor() as cursor:
                 cursor.execute("SELECT * FROM " + self.table)
                 self.data = cursor.fetchall()
-            print(self.data)
+
+                cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema='" + self.db + "'" + " AND " + "table_name='" + self.table + "'")
+                temp = cursor.fetchall()
+                
+                for column in temp:
+                    self.columns.append(column["COLUMN_NAME"])
         finally:
             connection.close()
 

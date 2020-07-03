@@ -131,7 +131,6 @@ class TableModel(QAbstractTableModel):
         for key in self.metadata['columns']: 
             new_obj[key] = "..."
 
-        
         if len(self.handler_reference.all_data) == 0:
             new_obj[self.metadata["representing key"]] = 1
         else:
@@ -140,8 +139,6 @@ class TableModel(QAbstractTableModel):
         self.d.append(new_obj)
         self.handler_reference.all_data.append(new_obj)
         self.handler_reference.edit()
-
-        
 
         self.endInsertRows()
         return True

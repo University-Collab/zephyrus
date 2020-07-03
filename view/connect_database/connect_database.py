@@ -72,7 +72,8 @@ class ConnectDatabase(QDialog):
 
         if not is_connected:
             if len(self.user.text()) > 0 and len(self.password.text()) > 0 and len(self.db_name.text()) > 0 and len(self.host_name.text()) > 0:
-                connection = mysql.connect(
+                try:
+                    connection = mysql.connect(
                         host=self.host_name.text(),
                         user=self.user.text(),
                         password=self.password.text(),
@@ -80,28 +81,31 @@ class ConnectDatabase(QDialog):
                         charset="utf8mb4",
                         cursorclass=mysql.cursors.DictCursor
                     )
-                try:
-                    db_sessions.append(
-                        {
-                            "index": len(db_sessions) + 1,
-                            "host": self.host_name.text(),
-                            "user": self.user.text(),
-                            "password": self.password.text(),
-                            "db": self.db_name.text()
-                        }
-                    )
+                    try:
+                        db_sessions.append(
+                            {
+                                "index": len(db_sessions) + 1,
+                                "host": self.host_name.text(),
+                                "user": self.user.text(),
+                                "password": self.password.text(),
+                                "db": self.db_name.text()
+                            }
+                        )
 
-                    QMessageBox.information(self, "Database connected. You rock!", "Hooray! Database successfully connected with Zephyrus.\n\nHint: Press Ctrl+R to refresh databases", QMessageBox.Ok)
+                        QMessageBox.information(self, "Database connected. You rock!", "Hooray! Database successfully connected with Zephyrus.\n\nHint: Press Ctrl+R to refresh databases", QMessageBox.Ok)
 
-                    with open("model/session/connected_dbs", "wb") as sessions:
-                        pickle.dump(db_sessions, sessions)
+                        with open("model/session/connected_dbs", "wb") as sessions:
+                            pickle.dump(db_sessions, sessions)
 
-                    self.close()
+                        self.close()
 
-                except mysql.Error as e:
-                    print(f'\nDB Error: {e.args[1]}\n')
-                    QMessageBox.critical(self, "Warning", "Wrong database credentials, you might be bad at typing...", QMessageBox.Close)
-                finally:
-                    connection.close()
+                    except mysql.Error as e:
+                        QMessageBox.critical(self, "Warning", "Incorrect database credentials, you might be bad at typing...", QMessageBox.Close)
+                    finally:
+                        connection.close()
+                except RuntimeError as e:
+                    QMessageBox.critical(self, "Connection Error", "There are no active MySQL servers!", QMessageBox.Close)
+                except mysql.OperationalError as e:
+                    QMessageBox.critical(self, "Connection Error", "Incorrect Credentials!", QMessageBox.Close)
             else:
                 QMessageBox.critical(self, "Warning", "You didn't fill out all fields!", QMessageBox.Close)

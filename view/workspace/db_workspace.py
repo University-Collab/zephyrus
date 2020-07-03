@@ -137,8 +137,12 @@ class DBWorkspace(QWidget):
             return
 
     def row_selected(self, index):
+        if index.column() == len(self.main_table.model().handler_reference.columns):
+            pass
+        if index.column() == len(self.main_table.model().handler_reference.columns) + 1:
+            self.main_table.delete_row(index.row())
         self.selected_row = index.row()
-        data = self.main_table.model().get_element(index)
+        # data = self.main_table.delete_row(index.row())
 
     def create_tab_widget(self):
         self.tab_widget = QTabWidget()

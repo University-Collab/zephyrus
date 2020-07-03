@@ -42,6 +42,7 @@ class TableView(QTableView):
         alert.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
         alert.setDefaultButton(QMessageBox.No)
         response = alert.exec_()
+        
         if response == QMessageBox.No:
             return
         else: 

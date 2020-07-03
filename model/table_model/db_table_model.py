@@ -74,7 +74,11 @@ class DBTableModel(QAbstractTableModel):
         return super().flags(index) | QtCore.Qt.ItemIsEditable
 
     def removeRows(self, row, rows, index=QtCore.QModelIndex()):
-        pass
+        row_data = self.displayed_d[row]
+        primary_key_value = row_data[self.columns[0]]
+        self.handler_reference.delete_one(primary_key_value)
+        self.handler_reference.get_all()
+        self.layoutChanged.emit()
 
     def insertRows(self, row, rows, index=QtCore.QModelIndex()):
         pass

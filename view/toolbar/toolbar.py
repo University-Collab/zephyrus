@@ -13,7 +13,7 @@ class Toolbar(QToolBar):
         self.connect_database = QToolButton(self)
         self.connect_database.setIcon(QIcon("view/images/toolbar/database-connect.png"))
         self.connect_database.setToolTip("Connect Database")
-        self.connect_database.clicked.connect(self.connect_db.display_dialog)
+        self.connect_database.clicked.connect(self.connect_db.show)
         self.addWidget(self.connect_database)
 
         self.open = QToolButton(self)

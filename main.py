@@ -44,17 +44,17 @@ if __name__ == "__main__":
     menubar.view_menu.addAction(toggle_dock_action)
 
     dock_db = Dock("Connected Databases", central_widget, window)
-    dock_db.list_init()
+    dock_db.init_db_tree()
     window.addDockWidget(Qt.LeftDockWidgetArea, dock_db)
     toggle_connected_dbs_action = dock_db.toggleViewAction()
     toggle_connected_dbs_action.setShortcut("Ctrl+D")
-    
+
     refresh_action = QAction(QIcon("view/images/menubar/refresh.png"), "Refresh Connected DBs", dock_db)
     refresh_action.setShortcut("Ctrl+R")
     refresh_action.setStatusTip("Refreshes list of connected databases in the dock")
     refresh_action.triggered.connect(dock_db.connected_dbs)
-    
-    menubar.tools_menu.addAction(refresh_action)
+
+    menubar.database_menu.addAction(refresh_action)
     menubar.view_menu.addAction(toggle_connected_dbs_action)
 
     window.showMaximized()

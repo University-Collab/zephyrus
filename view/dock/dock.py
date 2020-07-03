@@ -17,6 +17,8 @@ class Dock(QDockWidget):
         self.model = QFileSystemModel()
         self.model.setRootPath(QDir.currentPath())
         self.tree = QTreeView()
+        self.tree.pressed.connect(self.setIndex)
+        self.index_ = None
 
         self.db_tree = QTreeView()
         self.db_tree.setAnimated(True)
@@ -25,6 +27,29 @@ class Dock(QDockWidget):
         self.db_root = self.db_model.invisibleRootItem()
 
         self.dbs = []
+
+    def contextMenuEvent(self, event):
+        contextMenu = QMenu(self)
+        deleteFile = contextMenu.addAction("Delete File")
+        action = contextMenu.exec_(self.mapToGlobal(event.pos()))
+        if action == deleteFile:
+            alert = QMessageBox()
+            alert.setWindowTitle("Action Dialog")
+            alert.setText("Are you sure you want to delete this file?")
+            alert.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+            alert.setDefaultButton(QMessageBox.No)
+            response = alert.exec_()
+            if response == QMessageBox.No:
+                contextMenu.close()
+            else:
+                file_name = self.model.filePath(self.index_).split("storage/")[1]
+                os.remove(self.model.filePath(self.index_))
+                os.remove(self.model.filePath(self.index_).split("/storage")[0] + "/meta/" + file_name + "_metadata.json")
+                contextMenu.close()
+
+
+    def setIndex(self, index):
+        self.index_ = index
 
     def tree_init(self):
         self.tree.setModel(self.model)

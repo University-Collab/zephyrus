@@ -59,10 +59,6 @@ class SubtableWidget(QWidget):
 
         self.stacked_layout_2 = QVBoxLayout()
         self.stacked_layout_2.addStretch(0)
-        # self.stacked_layout_2.addWidget(self.label)
-        # self.stacked_layout_2.addWidget(self.manageData2)
-        # self.stacked_layout_2.addWidget(self.addData2)
-        # self.stacked_layout_2.setCurrentIndex(0)
 
         self.toolBar.actionTriggered.connect(self.sub_toolbar_actions)
 

@@ -20,9 +20,18 @@ class TableModel(QAbstractTableModel):
         return self.displayed_d[index.row()]
 
     def get_element_d(self, representing_value):
+        results = []
         for data in self.d:
             if data[self.metadata["representing key"]] == representing_value:
-                return data
+                results.append(data)
+                break
+
+        for obj in self.handler_reference.all_data:
+            if obj[self.metadata["representing key"]] == representing_value:
+                results.append(obj)
+                break
+
+        return results
 
     def rowCount(self, index):
         return len(self.displayed_d)
@@ -66,7 +75,10 @@ class TableModel(QAbstractTableModel):
     # Editable model methods
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         edited_data = self.get_element(index)
-        reference = self.get_element_d(edited_data[self.metadata["representing key"]])
+        results = self.get_element_d(edited_data[self.metadata["representing key"]])
+        print(results)
+        reference1 = results[0]
+        reference2 = results[1]
         # print(edited_data)
         i = 0
 
@@ -78,7 +90,8 @@ class TableModel(QAbstractTableModel):
             if index.column() == i and role == QtCore.Qt.EditRole:
                 
 
-                reference[self.metadata["columns"][i]] = value
+                reference1[self.metadata["columns"][i]] = value
+                reference2[self.metadata["columns"][i]] = value
                 self.handler_reference.edit()
                 return True
 
@@ -96,6 +109,13 @@ class TableModel(QAbstractTableModel):
         for data in self.d:
             if data[self.metadata["representing key"]] == row_data[self.metadata["representing key"]]:
                 self.d.pop(i)
+                j = 0
+                for obj in self.handler_reference.all_data:
+                    if obj[self.metadata["representing key"]] == row_data[self.metadata["representing key"]]:
+                        self.handler_reference.all_data.pop(j)
+                        break
+                    j += 1
+
                 self.layoutChanged.emit()
                 break
             i +=1
@@ -110,23 +130,36 @@ class TableModel(QAbstractTableModel):
         
         for key in self.metadata['columns']: 
             new_obj[key] = "..."
-        new_obj[self.metadata["representing key"]] = self.d[len(self.d)-1][self.metadata["representing key"]]+1
 
+        
+        if len(self.handler_reference.all_data) == 0:
+            new_obj[self.metadata["representing key"]] = 1
+        else:
+            new_obj[self.metadata["representing key"]] = self.handler_reference.all_data[len(self.handler_reference.all_data) - 1][self.metadata["representing key"]] + 1
         self.displayed_d.append(new_obj)
         self.d.append(new_obj)
+        self.handler_reference.all_data.append(new_obj)
         self.handler_reference.edit()
+
+        
+
         self.endInsertRows()
         return True
 
     def insert_row(self, row_obj):
         
         new_obj = row_obj
-        new_obj[self.metadata["representing key"]] = self.d[len(self.d)-1][self.metadata["representing key"]] + 1
-       
-
+        
+        if len(self.handler_reference.all_data) == 0:
+            new_obj[self.metadata["representing key"]] = 1
+        else:
+            new_obj[self.metadata["representing key"]] = self.handler_reference.all_data[len(self.handler_reference.all_data) - 1][self.metadata["representing key"]] + 1
         self.displayed_d.append(new_obj)
         self.d.append(new_obj)
+        self.handler_reference.all_data.append(new_obj)
         self.handler_reference.edit()
+
+        
         
         self.layoutChanged.emit()
         return True

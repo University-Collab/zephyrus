@@ -7,8 +7,10 @@ class SerialDataHandler(DataHandler):
         super().__init__()
         self.path = path
         self.meta_path = meta_path
-        self.loaded_data = []
+        # self.data_2 = []
         self.data = []
+        self.data_size = 0
+        self.all_data = []
         self.meta_data = {}
         self.search_key = ""
         self.linked_file_path = ""
@@ -22,13 +24,17 @@ class SerialDataHandler(DataHandler):
         
             
         with open(self.path, "rb") as data_file:
-            loaded_data = pickle.load(data_file)
+            self.all_data = pickle.load(data_file)
+            self.data_size = len(self.all_data)
             if self.unique_data:
-                for obj in loaded_data:
+                for obj in self.all_data:
                     if obj[self.search_key] == self.unique_data:
                         self.data.append(obj)
+                    # else:
+                    #     self.data_2.append(obj)
             else:
-                self.data = loaded_data
+                for obj in self.all_data:
+                    self.data.append(obj)
                 
 
  
@@ -46,8 +52,16 @@ class SerialDataHandler(DataHandler):
         self.save(self.data)
 
     def save(self):
+        # if len(self.data_2) != 0:
+        #     for each in self.data:
+        #         self.data_2.append(each)
+
         with open(self.path, "wb") as pickle_file:
-            pickle.dump(self.data, pickle_file)
+            pickle.dump(self.all_data, pickle_file)
+
+        # else:
+        #     with open(self.path, "wb") as pickle_file:
+        #         pickle.dump(self.data, pickle_file)
 
     def edit(self):
         self.save()

@@ -7,8 +7,10 @@ class SequentialDataHandler(DataHandler):
         super().__init__()
         self.path = path
         self.meta_path = meta_path
-        self.loaded_data = []
+        # self.data_2 = []
         self.data = []
+        self.data_size = 0
+        self.all_data = []
         self.meta_data = {}
         self.search_key = ""
         self.representing_key = ""
@@ -23,13 +25,17 @@ class SequentialDataHandler(DataHandler):
             self.representing_key = self.meta_data["representing key"]
             
         with open(self.path, "rb") as data_file:
-            loaded_data = sorted(pickle.load(data_file), key=lambda k: k[self.representing_key])
+            self.all_data = sorted(pickle.load(data_file), key=lambda k: k[self.representing_key])
+            self.data_size = len(self.all_data)
             if self.unique_data:
-                for obj in loaded_data:
+                for obj in self.all_data:
                     if obj[self.search_key] == self.unique_data:
                         self.data.append(obj)
+                    # else:
+                    #     self.data_2.append(obj)
             else:
-                self.data = loaded_data
+                for obj in self.all_data:
+                    self.data.append(obj)
 
     def get_one(self, unique_data):
         if len(self.data) == 0:
@@ -62,7 +68,13 @@ class SequentialDataHandler(DataHandler):
             pickle.dump(data, pickle_file)
 
     def edit(self):
-        self.save(data=sorted(self.data, key=lambda k: k[self.representing_key]))
+        # if len(self.data_2) != 0:
+        #     for each in self.data:
+        #         self.data_2.append(each)
+        #     self.save(data=sorted(self.data_2, key=lambda k: k[self.representing_key]))
+
+        # else:
+        self.save(data=sorted(self.all_data, key=lambda k: k[self.representing_key]))
 
     def delete_one(self, unique_data):
         if len(self.data) == 1:

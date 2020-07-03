@@ -33,6 +33,7 @@ class AddData(QWidget):
         for column in self.table.model().metadata['columns']:
             self.form.addRow(column, QLineEdit())
         self.button = QPushButton("add")
+        self.button.setStyleSheet("width: 200px")
         self.button.clicked.connect(self.add_row)
         self.fresh_button = QPushButton("start fresh")
         self.fresh_button.clicked.connect(self.clean)

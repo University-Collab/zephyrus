@@ -1,7 +1,7 @@
 import json, pickle
 from PySide2.QtWidgets import (QWidget, QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QStackedLayout, QTabWidget,
                                QTableView, QAbstractItemView, QLineEdit, QMenu,
-                               QAction, QSizePolicy, QLineEdit, QComboBox, QListWidget, QToolBar, QMessageBox)
+                               QAction, QSizePolicy, QLineEdit, QComboBox, QListWidget, QToolBar, QMessageBox, QLayout, QBoxLayout)
                                
 from PySide2 import QtGui
 from PySide2.QtGui import QIcon
@@ -29,6 +29,7 @@ class Workspace(QWidget):
         self.handler = None
         self.table_model = None
         self.meta_data = None
+        self.sub_meta_data = None
         self.create_tab_widget()
 
         self.main_table = TableView(self.tab_widget)
@@ -38,6 +39,7 @@ class Workspace(QWidget):
         self.main_table.clicked.connect(self.row_selected)
 
         self.package = QVBoxLayout()
+        self.package.addStretch(0)
         
         self.toolBar = QToolBar()
         self.toolBar.setMovable(True)
@@ -69,13 +71,13 @@ class Workspace(QWidget):
         self.manageData = ManageData(self.main_table)
         self.addData = AddData(self.main_table)
 
-        self.stacked_layout = QStackedLayout()
+        self.stacked_layout = QVBoxLayout()
         self.label = QLabel()
         self.label.setText("Work with data, choose state.")
-        self.stacked_layout.addWidget(self.label)
-        self.stacked_layout.addWidget(self.manageData)
-        self.stacked_layout.addWidget(self.addData)
-        self.stacked_layout.setCurrentIndex(0)
+        # self.stacked_layout.addWidget(self.label)
+        # self.stacked_layout.addWidget(self.manageData)
+        # self.stacked_layout.addWidget(self.addData)
+        # self.stacked_layout.setCurrentIndex(0)
 
         self.toolBar.actionTriggered.connect(self.toolbar_actions)
 
@@ -84,6 +86,7 @@ class Workspace(QWidget):
         self.package.addWidget(self.main_table)
         
         self.main_layout.addLayout(self.package)
+        self.main_layout.addStretch(0)
 
         self.selected_row = 0
      
@@ -91,17 +94,70 @@ class Workspace(QWidget):
 
     def toolbar_actions(self, action):
         if action.iconText() == "Manage Data":
-            self.stacked_layout.setCurrentIndex(1)
+            if self.stacked_layout.indexOf(self.addData) == -1 and self.stacked_layout.indexOf(self.manageData) == -1 and self.stacked_layout.indexOf(self.label) == -1:
+                self.stacked_layout.addWidget(self.manageData)
+                self.manageData.setVisible(True)
+                return
+            if self.stacked_layout.indexOf(self.addData) != -1:
+                self.stacked_layout.removeWidget(self.addData)
+                self.addData.setVisible(False)
+                self.stacked_layout.addWidget(self.manageData)
+                self.manageData.setVisible(True)
+                return
+            if self.stacked_layout.indexOf(self.label) != -1:
+                self.stacked_layout.removeWidget(self.label)
+                self.label.setVisible(False)
+                self.stacked_layout.addWidget(self.manageData)
+                self.manageData.setVisible(True)
+                return
+            return 
+            # self.stacked_layout.setCurrentIndex(1)
         
         elif action.iconText() == "Add Data":
-            self.stacked_layout.setCurrentIndex(2)
+            if self.stacked_layout.indexOf(self.addData) == -1 and self.stacked_layout.indexOf(self.manageData) == -1 and self.stacked_layout.indexOf(self.label) == -1:
+                self.stacked_layout.addWidget(self.addData)
+                self.addData.setVisible(True)
+                return
+            if self.stacked_layout.indexOf(self.manageData) != -1:
+                self.stacked_layout.removeWidget(self.manageData)
+                self.manageData.setVisible(False)
+                self.stacked_layout.addWidget(self.addData)
+                self.addData.setVisible(True)
+                return
+            if self.stacked_layout.indexOf(self.label) != -1:
+                self.stacked_layout.removeWidget(self.label)
+                self.label.setVisible(False)
+                self.stacked_layout.addWidget(self.addData)
+                self.addData.setVisible(True)
+                return
+            return
+            # self.stacked_layout.setCurrentIndex(2)
 
         elif action.iconText() == "Close":
-            self.stacked_layout.setCurrentIndex(0)    
+            if self.stacked_layout.indexOf(self.addData) == -1 and self.stacked_layout.indexOf(self.manageData) == -1 and self.stacked_layout.indexOf(self.label) == -1:
+                self.stacked_layout.addWidget(self.label)
+                self.label.setVisible(True)
+                return
+            if self.stacked_layout.indexOf(self.addData) != -1:
+                self.stacked_layout.removeWidget(self.addData)
+                self.addData.setVisible(False)
+                self.stacked_layout.addWidget(self.label)
+                self.label.setVisible(True)
+                return
+            if self.stacked_layout.indexOf(self.manageData) != -1:
+                self.stacked_layout.removeWidget(self.manageData)
+                self.manageData.setVisible(False)
+                self.stacked_layout.addWidget(self.label)
+                self.label.setVisible(True)
+                return
+            return
+            # self.stacked_layout.setCurrentIndex(0)    
 
     def set_paths(self):
         self.subtable_path = self.file_path.split("storage/")[0] + "storage/" + self.meta_data["linked file"]
         self.subtable_meta_path = self.file_path.split("storage/")[0] + "meta/" + self.meta_data["linked file"] + "_metadata.json"
+        with open(self.subtable_meta_path, "r") as data:
+            self.sub_meta_data = json.load(data)
 
     def create_model(self): 
         temp = self.file_path.split("storage/")
@@ -111,26 +167,26 @@ class Workspace(QWidget):
             data = json.load(metadata)
             self.meta_data = data
 
-        handler = QMessageBox()
-        handler.setWindowTitle("Need for speed?")
-        handler.setText("Is there a need for fast sequential file handling?")
-        handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
-        handler.setDefaultButton(QMessageBox.No)
-        user_reply = handler.exec_()
+        # handler = QMessageBox()
+        # handler.setWindowTitle("Need for speed?")
+        # handler.setText("Is there a need for fast sequential file handling?")
+        # handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+        # handler.setDefaultButton(QMessageBox.No)
+        # user_reply = handler.exec_()
 
-        if user_reply == QMessageBox.No:
+        if self.meta_data["handler type"] == "serial":
             self.handler = SerialDataHandler(self.file_path, self.meta_path)
             self.table_model = TableModel(self.handler)
             self.main_table.setModel(self.table_model)
 
-        if user_reply == QMessageBox.Yes:
+        if self.meta_data["handler type"] == "sequential":
             self.handler = SequentialDataHandler(self.file_path,
                                                 self.meta_path)
             self.table_model = TableModel(self.handler)
             self.main_table.setModel(self.table_model)
 
     def row_selected(self, index):
-        if index.column() <= len(self.main_table.model().metadata["columns"]):
+        if index.column() == len(self.main_table.model().metadata["columns"]):
 
             model = self.main_table.model()
             selected_data = model.get_element(index)
@@ -140,19 +196,19 @@ class Workspace(QWidget):
             self.set_paths()
             unique_data = selected_data[self.meta_data["search key"]]            
 
-            handler = QMessageBox()
-            handler.setWindowTitle("Need for speed?")
-            handler.setText("Is there a need for fast sequential file handling?")
-            handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
-            handler.setDefaultButton(QMessageBox.No)
-            user_reply = handler.exec_()
+            # handler = QMessageBox()
+            # handler.setWindowTitle("Need for speed?")
+            # handler.setText("Is there a need for fast sequential file handling?")
+            # handler.setStandardButtons(QMessageBox.No | QMessageBox.Yes)
+            # handler.setDefaultButton(QMessageBox.No)
+            # user_reply = handler.exec_()
 
-            if user_reply == QMessageBox.No:
+            if self.sub_meta_data["handler type"] == "serial":
                 subtable_model = TableModel(
                     SerialDataHandler(self.subtable_path, self.subtable_meta_path,
                                     unique_data))
 
-            if user_reply == QMessageBox.Yes:
+            if self.sub_meta_data["handler type"] == "sequential":
                 subtable_model = TableModel(
                     SequentialDataHandler(self.subtable_path, self.subtable_meta_path,
                                         unique_data))

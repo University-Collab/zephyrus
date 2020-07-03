@@ -212,116 +212,9 @@ class Workspace(QWidget):
 
             subtable_widget = SubtableWidget(subtable)
 
-            # package = QVBoxLayout()
-
-            # toolBar = QToolBar()
-            # toolBar.setMovable(True)
-
-            # sub_up = QAction(QIcon("view/images/toolbar/baseline_expand_less_black_48dp.png"), "Up", self.subtable)
-            # sub_up.setStatusTip("Move one up")
-            # sub_up.triggered.connect(self.sub_up)
-
-            # sub_down = QAction(QIcon("view/images/toolbar/baseline_expand_more_black_48dp.png"), "Down", self.subtable)
-            # sub_down.setStatusTip("Move one down")
-            # sub_down.triggered.connect(self.sub_down)
-
-            # sub_first = QAction(QIcon("view/images/toolbar/baseline_first_page_black_48dp.png"), "Jump to first", self.subtable)
-            # sub_first.setStatusTip("Jump to first")
-            # sub_first.triggered.connect(self.sub_first)
-
-            # sub_last = QAction(QIcon("view/images/toolbar/baseline_last_page_black_48dp.png"), "Jump to last", self.subtable)
-            # sub_last.setStatusTip("Jump to last")
-            # sub_last.triggered.connect(self.sub_last)
-            
-            # toolBar.addAction(QIcon("view/images/toolbar/list_48px.png"), "Manage Data")
-            # toolBar.addAction(QIcon("view/images/toolbar/add_new_40px.png"), "Add Data")
-            # toolBar.addAction(sub_first)
-            # toolBar.addAction(sub_up)
-            # toolBar.addAction(sub_down)
-            # toolBar.addAction(sub_last)
-            # toolBar.addAction(QIcon("view/images/toolbar/close_window_26px.png"), "Close")
-
-            # self.manageData2 = ManageData(self.subtable)
-
-            # self.addData2 = AddData(self.subtable)
-
-            # self.stacked_layout_2 = QVBoxLayout()
-            # self.stacked_layout_2.addWidget(self.label)
-            # self.stacked_layout_2.addWidget(self.manageData2)
-            # self.stacked_layout_2.addWidget(self.addData2)
-            # # self.stacked_layout_2.setCurrentIndex(0)
-
-            # toolBar.actionTriggered.connect(self.sub_toolbar_actions)
-
-            # package.addWidget(toolBar)
-            # package.addLayout(self.stacked_layout_2)
-            # package.addWidget(self.subtable)
-
-            # widg_ = QWidget()
-            # widg_.setLayout(package)
-
             self.tab_widget.addTab(subtable_widget, self.meta_data["additional tab name"])
             self.main_layout.addWidget(self.tab_widget)
 
-    # def sub_toolbar_actions(self, action):
-    #     if action.iconText() == "Manage Data":
-    #         if self.stacked_layout_2.indexOf(self.addData2) == -1 and self.stacked_layout_2.indexOf(self.manageData2) == -1 and self.stacked_layout_2.indexOf(self.label) == -1:
-    #             self.stacked_layout_2.addWidget(self.manageData2)
-    #             self.manageData2.setVisible(True)
-    #             return
-    #         if self.stacked_layout_2.indexOf(self.addData2) != -1:
-    #             self.stacked_layout_2.removeWidget(self.addData2)
-    #             self.addData2.setVisible(False)
-    #             self.stacked_layout_2.addWidget(self.manageData2)
-    #             self.manageData2.setVisible(True)
-    #             return
-    #         if self.stacked_layout_2.indexOf(self.label) != -1:
-    #             self.stacked_layout_2.removeWidget(self.label)
-    #             self.label.setVisible(False)
-    #             self.stacked_layout_2.addWidget(self.manageData2)
-    #             self.manageData2.setVisible(True)
-    #             return
-    #         return 
-            
-        
-    #     elif action.iconText() == "Add Data":
-    #         if self.stacked_layout_2.indexOf(self.addData2) == -1 and self.stacked_layout_2.indexOf(self.manageData2) == -1 and self.stacked_layout_2.indexOf(self.label) == -1:
-    #             self.stacked_layout_2.addWidget(self.addData2)
-    #             self.addData2.setVisible(True)
-    #             return
-    #         if self.stacked_layout_2.indexOf(self.manageData2) != -1:
-    #             self.stacked_layout_2.removeWidget(self.manageData2)
-    #             self.manageData2.setVisible(False)
-    #             self.stacked_layout_2.addWidget(self.addData2)
-    #             self.addData2.setVisible(True)
-    #             return
-    #         if self.stacked_layout_2.indexOf(self.label) != -1:
-    #             self.stacked_layout_2.removeWidget(self.label)
-    #             self.label.setVisible(False)
-    #             self.stacked_layout_2.addWidget(self.addData2)
-    #             self.addData2.setVisible(True)
-    #             return
-    #         return
-            
-
-    #     elif action.iconText() == "Close":
-    #         if self.stacked_layout_2.indexOf(self.addData2) == -1 and self.stacked_layout_2.indexOf(self.manageData2) == -1 and self.stacked_layout_2.indexOf(self.label) == -1:
-    #             self.stacked_layout_2.addWidget(self.label)
-    #             self.label.setVisible(True)
-    #             return
-    #         if self.stacked_layout_2.indexOf(self.addData2) != -1:
-    #             self.stacked_layout_2.removeWidget(self.addData2)
-    #             self.addData2.setVisible(False)
-    #             self.stacked_layout_2.addWidget(self.label)
-    #             self.label.setVisible(True)
-    #             return
-    #         if self.stacked_layout_2.indexOf(self.manageData2) != -1:
-    #             self.stacked_layout_2.removeWidget(self.manageData2)
-    #             self.manageData2.setVisible(False)
-    #             self.stacked_layout_2.addWidget(self.label)
-    #             self.label.setVisible(True)
-    #             return
-    #         return
 
     def create_tab_widget(self):
         self.tab_widget = QTabWidget()
@@ -352,21 +245,4 @@ class Workspace(QWidget):
         self.selected_row = len(self.main_table.model().displayed_d) - 1
         self.main_table.selectRow(self.selected_row)
 
-    # def sub_up(self):
-    #     if self.selected_row != 0:
-    #         self.selected_row -= 1
-    #         self.subtable.selectRow(self.selected_row)
-
-    # def sub_down(self):
-    #     if self.selected_row < len(self.subtable.model().displayed_d) - 1:
-    #         self.selected_row += 1
-    #         self.subtable.selectRow(self.selected_row)
-
-    # def sub_first(self):
-    #     self.selected_row = 0
-    #     self.subtable.selectRow(self.selected_row)
-
-    # def sub_last(self):
-    #     self.selected_row = len(self.subtable.model().displayed_d) - 1
-    #     self.subtable.selectRow(self.selected_row)
 

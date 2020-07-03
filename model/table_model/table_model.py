@@ -88,8 +88,6 @@ class TableModel(QAbstractTableModel):
         
         for i in range(len(self.metadata["columns"])):
             if index.column() == i and role == QtCore.Qt.EditRole:
-                
-
                 reference1[self.metadata["columns"][i]] = value
                 reference2[self.metadata["columns"][i]] = value
                 self.handler_reference.edit()

@@ -1,10 +1,11 @@
 import pickle
 import pymysql as mysql
 from controller.data_handler.data_handler import DataHandler
+from PySide2.QtWidgets import QMessageBox
 
 
 class DBHandler(DataHandler):
-    def __init__(self, db, table):
+    def __init__(self, db, table, parent=None):
         super().__init__()
         self.db = db
         self.table = table
@@ -14,6 +15,7 @@ class DBHandler(DataHandler):
         self.user = None
         self.password = None
         self.host = None
+        self.parent = parent
 
         self.load_sessions()
         self.load_data()
@@ -31,7 +33,7 @@ class DBHandler(DataHandler):
     def load_data(self):
         self.get_all()
 
-    def get_one(self, id):
+    def get_one(self, key, id):
         connection = mysql.connect(
             host=self.host,
             user=self.user,
@@ -43,7 +45,7 @@ class DBHandler(DataHandler):
 
         try:
             with connection.cursor() as cursor:
-                cursor.execute("SELECT * FROM " + self.table + " WHERE id = " + id)
+                cursor.execute("SELECT * FROM " + self.table + " WHERE " + key + "=" + id)
                 self.data = cursor.fetchone()
 
                 cursor.execute("SELECT column_name FROM information_schema.columns WHERE table_schema='" + self.db + "'" + " AND " + "table_name='" + self.table + "' WHERE id=" + id)
@@ -82,7 +84,7 @@ class DBHandler(DataHandler):
         finally:
             connection.close()
 
-    def edit(self, obj):
+    def edit(self, column, key, value, id):
         connection = mysql.connect(
             host=self.host,
             user=self.user,
@@ -94,12 +96,16 @@ class DBHandler(DataHandler):
 
         try:
             with connection.cursor() as cursor:
-                # TODO: cursor.execute("UPDATE %s SET %s = %s WHERE id = %s", (self.table, , obj))
+                cursor.execute("UPDATE " + self.table + " SET " + column + " = " + value + " WHERE " + key + "=" + str(id))
                 connection.commit()
+        except mysql.Error as e:
+            print(f'Database Error: {e}')
+            QMessageBox.warning(self.parent, "Edit Error", f'Database Error: {e}', QMessageBox.Ok)
+            connection.rollback()
         finally:
             connection.close()
 
-    def delete_one(self, id):
+    def delete_one(self, key, id):
         connection = mysql.connect(
             host=self.host,
             user=self.user,
@@ -111,8 +117,11 @@ class DBHandler(DataHandler):
 
         try:
             with connection.cursor() as cursor:
-                cursor.execute("DELETE FROM " + self.table + " WHERE id = " + id)
+                cursor.execute("DELETE FROM " + self.table + " WHERE " + key + "=" + str(id))
                 connection.commit()
+        except mysql.Error as e:
+            print(f'Database Error: {e}')
+            connection.rollback()
         finally:
             connection.close()
 
@@ -125,11 +134,20 @@ class DBHandler(DataHandler):
             charset="utf8mb4",
             cursorclass=mysql.cursors.DictCursor
         )
+        
+        values = obj.values()
 
         try:
             with connection.cursor() as cursor:
-                cursor.execute("INSERT INTO " + self.table + " VALUES " + "(" + obj + ")")
+                cursor.execute("INSERT INTO " + self.table + " VALUES " + "('" + "','".join(values)  + "')")
                 connection.commit()
+            self.load_data()
+            return True
+        except mysql.Error as e:
+            print(f'Database Error: {e}')
+            QMessageBox.warning(self.parent, "Insert Error", f'Database Error: {e}', QMessageBox.Ok)
+            connection.rollback()
+            return False
         finally:
             connection.close()
 

@@ -32,7 +32,7 @@ class DBAddData(QWidget):
         self.form = QFormLayout()
         for column in self.table.model().columns:
             self.form.addRow(column, QLineEdit())
-        self.button = QPushButton("add")
+        self.button = QPushButton("Add")
         self.button.setStyleSheet("width: 200px")
         self.button.clicked.connect(self.add_row)
         self.fresh_button = QPushButton("start fresh")

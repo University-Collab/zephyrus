@@ -24,7 +24,8 @@ class DBTableView(QTableView):
 
         if response == QMessageBox.No:
             return
-        else: 
+            
+        if response == QMessageBox.Yes:
             if row == None:
                 self.model().removeRows(self.row, 1, QModelIndex())
             else:

@@ -15,6 +15,7 @@ class DBWorkspace(QWidget):
         super().__init__(parent)
         
         self.main_layout = QVBoxLayout()
+        self.main_layout.addStretch()
         self.tab_widget = None
         self.handler = None
         self.db = db
@@ -72,7 +73,6 @@ class DBWorkspace(QWidget):
         self.package.addWidget(self.main_table)
 
         self.main_layout.addLayout(self.package)
-        self.main_layout.addStretch(0)
 
         self.selected_row = 0
 
@@ -137,12 +137,12 @@ class DBWorkspace(QWidget):
             return
 
     def row_selected(self, index):
-        if index.column() == len(self.main_table.model().handler_reference.columns):
-            pass
-        if index.column() == len(self.main_table.model().handler_reference.columns) + 1:
-            self.main_table.delete_row(index.row())
-        self.selected_row = index.row()
-        # data = self.main_table.delete_row(index.row())
+        if index.column() == len(self.main_table.model().columns):
+
+            model = self.main_table.model()
+            selected_data = model.get_element(index)
+
+            self.selected_row = index.row()
 
     def create_tab_widget(self):
         self.tab_widget = QTabWidget()
@@ -153,7 +153,7 @@ class DBWorkspace(QWidget):
         self.tab_widget.removeTab(index)
 
     def init_table(self):
-        self.handler = DBHandler(self.db, self.table)
+        self.handler = DBHandler(self.db, self.table, self)
         self.table_model = DBTableModel(self.handler)
         self.main_table.setModel(self.table_model)
 
@@ -166,7 +166,7 @@ class DBWorkspace(QWidget):
             self.main_table.selectRow(self.selected_row)
 
     def jump_down(self):
-        if self.selected_row < len(self.main_table.model().d) - 1:
+        if self.selected_row < len(self.main_table.model().displayed_d) - 1:
             self.selected_row += 1
             self.main_table.selectRow(self.selected_row)
 
@@ -175,7 +175,7 @@ class DBWorkspace(QWidget):
         self.main_table.selectRow(self.selected_row)
 
     def jump_to_last(self):
-        self.selected_row = len(self.main_table.model().d) - 1
+        self.selected_row = len(self.main_table.model().displayed_d) - 1
         self.main_table.selectRow(self.selected_row)
 
     def sub_up(self):
@@ -184,7 +184,7 @@ class DBWorkspace(QWidget):
             self.subtable.selectRow(self.selected_row)
 
     def sub_down(self):
-        if self.selected_row < len(self.subtable.model().d) - 1:
+        if self.selected_row < len(self.subtable.model().displayed_d) - 1:
             self.selected_row += 1
             self.subtable.selectRow(self.selected_row)
 
@@ -193,6 +193,6 @@ class DBWorkspace(QWidget):
         self.subtable.selectRow(self.selected_row)
 
     def sub_last(self):
-        self.selected_row = len(self.subtable.model().d) - 1
+        self.selected_row = len(self.subtable.model().displayed_d) - 1
         self.subtable.selectRow(self.selected_row)
 

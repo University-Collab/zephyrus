@@ -56,15 +56,13 @@ class DBTableModel(QAbstractTableModel):
 
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         edited_data = self.get_element(index)
-        
-        print(edited_data)
 
         if value == "":
             return False
 
         for i in range(len(self.columns)):
             if index.column() == i and role == QtCore.Qt.EditRole:
-                self.handler_reference.edit(value)
+                self.handler_reference.edit(list(edited_data.keys())[i], list(edited_data.keys())[0], value, edited_data[list(edited_data.keys())[0]])
                 self.handler_reference.load_data()
                 self.layoutChanged.emit()
                 return True
@@ -76,15 +74,23 @@ class DBTableModel(QAbstractTableModel):
     def removeRows(self, row, rows, index=QtCore.QModelIndex()):
         row_data = self.displayed_d[row]
         primary_key_value = row_data[self.columns[0]]
-        self.handler_reference.delete_one(primary_key_value)
-        self.handler_reference.get_all()
+        self.handler_reference.delete_one(list(row_data.keys())[0], primary_key_value)
+        self.displayed_d.pop(row)
         self.layoutChanged.emit()
+
+        return True
 
     def insertRows(self, row, rows, index=QtCore.QModelIndex()):
         pass
 
     def insert_row(self, row_obj):
-        pass
+        success = self.handler_reference.insert(row_obj)
+        if success:
+            self.displayed_d.append(row_obj)
+            self.layoutChanged.emit()
+
+        return True
+
 
     def table_search(self, search_line, combo_line):
         if self.data == []:

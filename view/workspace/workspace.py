@@ -130,7 +130,6 @@ class Workspace(QWidget):
                 return
             return
             
-
         elif action.iconText() == "Close":
             if self.stacked_layout.indexOf(self.addData) == -1 and self.stacked_layout.indexOf(self.manageData) == -1 and self.stacked_layout.indexOf(self.label) == -1:
                 self.stacked_layout.addWidget(self.label)
@@ -150,7 +149,6 @@ class Workspace(QWidget):
                 return
             return
                
-
     def set_paths(self):
         subtable_path = self.file_path.split("storage/")[0] + "storage/" + self.meta_data["linked file"]
         subtable_meta_path = self.file_path.split("storage/")[0] + "meta/" + self.meta_data["linked file"] + "_metadata.json"
@@ -169,7 +167,6 @@ class Workspace(QWidget):
         with open(self.meta_path) as metadata:
             data = json.load(metadata)
             self.meta_data = data
-
 
         if self.meta_data["handler type"] == "serial":
             self.handler = SerialDataHandler(self.file_path, self.meta_path)

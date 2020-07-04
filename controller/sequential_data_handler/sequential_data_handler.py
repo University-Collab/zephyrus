@@ -7,7 +7,6 @@ class SequentialDataHandler(DataHandler):
         super().__init__()
         self.path = path
         self.meta_path = meta_path
-        # self.data_2 = []
         self.data = []
         self.data_size = 0
         self.all_data = []
@@ -31,8 +30,6 @@ class SequentialDataHandler(DataHandler):
                 for obj in self.all_data:
                     if obj[self.search_key] == self.unique_data:
                         self.data.append(obj)
-                    # else:
-                    #     self.data_2.append(obj)
             else:
                 for obj in self.all_data:
                     self.data.append(obj)
@@ -68,12 +65,6 @@ class SequentialDataHandler(DataHandler):
             pickle.dump(data, pickle_file)
 
     def edit(self):
-        # if len(self.data_2) != 0:
-        #     for each in self.data:
-        #         self.data_2.append(each)
-        #     self.save(data=sorted(self.data_2, key=lambda k: k[self.representing_key]))
-
-        # else:
         self.save(data=sorted(self.all_data, key=lambda k: k[self.representing_key]))
 
     def delete_one(self, unique_data):

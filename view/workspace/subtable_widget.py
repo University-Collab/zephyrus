@@ -21,7 +21,6 @@ class SubtableWidget(QWidget):
         self.subtable.clicked.connect(self.row_selected)
         self.selected_row = 0
 
-
         self.package = QVBoxLayout()
 
         self.toolBar = QToolBar()

@@ -72,14 +72,13 @@ class TableModel(QAbstractTableModel):
 
         return None
 
-    # Editable model methods
     def setData(self, index, value, role=QtCore.Qt.EditRole):
         edited_data = self.get_element(index)
         results = self.get_element_d(edited_data[self.metadata["representing key"]])
-        print(results)
+
         reference1 = results[0]
         reference2 = results[1]
-        # print(edited_data)
+
         i = 0
 
         if value == "":
@@ -102,8 +101,9 @@ class TableModel(QAbstractTableModel):
 
         row_data = self.displayed_d[row]
         self.displayed_d.pop(row)
-        # print(row_data)
+
         i = 0
+
         for data in self.d:
             if data[self.metadata["representing key"]] == row_data[self.metadata["representing key"]]:
                 self.d.pop(i)

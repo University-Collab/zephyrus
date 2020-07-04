@@ -56,7 +56,7 @@ class AddData(QWidget):
             obj[self.table.model().metadata["columns"][j]] = self.form.itemAt(i+1).widget().text()
             j +=1
             i +=2
-        print(obj)
+
         self.table.model().insert_row(obj)
         self.fresh_button.setVisible(True)
 

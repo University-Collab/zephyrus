@@ -5,7 +5,6 @@ from PySide2.QtGui import QIcon, QStandardItemModel, QStandardItem
 from PySide2.QtCore import QDir, Qt
 from view.workspace.workspace import Workspace
 from view.workspace.db_workspace import DBWorkspace
-from view.db_table_dialog.db_table_dialog import DBTableDialog
 from view.dock.standard_item import StandardItem
 
 

@@ -15,7 +15,6 @@ class DBWorkspace(QWidget):
         super().__init__(parent)
         
         self.main_layout = QVBoxLayout()
-        self.main_layout.addStretch()
         self.tab_widget = None
         self.handler = None
         self.db = db
@@ -30,7 +29,7 @@ class DBWorkspace(QWidget):
         self.main_table.clicked.connect(self.row_selected)
 
         self.package = QVBoxLayout()
-        self.package.addStretch(0)
+        self.package.addStretch(1)
 
         self.toolBar = QToolBar()
         self.toolBar.setMovable(True)
@@ -76,6 +75,7 @@ class DBWorkspace(QWidget):
 
         self.selected_row = 0
 
+        self.main_layout.addStretch(2)
         self.setLayout(self.main_layout)
 
     def toolbar_actions(self, action):

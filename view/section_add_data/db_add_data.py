@@ -2,6 +2,7 @@ from PySide2.QtWidgets import (QWidget, QLabel, QVBoxLayout, QHBoxLayout, QFormL
                                QTableView, QAbstractItemView, QLineEdit, QMenu,
                                QAction, QSizePolicy, QLineEdit, QComboBox)
 from PySide2 import QtGui
+from PySide2.QtCore import Qt
 
 class DBAddData(QWidget):
     def __init__(self, referenced_table, parent=None):
@@ -30,12 +31,14 @@ class DBAddData(QWidget):
         self.search_layout.addWidget(self.combo_options)
 
         self.form = QFormLayout()
+        self.form.setFieldGrowthPolicy(QFormLayout.FieldsStayAtSizeHint)
+        self.form.setFormAlignment(Qt.AlignLeft | Qt.AlignTop)
         for column in self.table.model().columns:
             self.form.addRow(column, QLineEdit())
         self.button = QPushButton("Add")
-        self.button.setStyleSheet("width: 200px")
+        self.button.setStyleSheet("width: 125px")
         self.button.clicked.connect(self.add_row)
-        self.fresh_button = QPushButton("start fresh")
+        self.fresh_button = QPushButton("Start Fresh")
         self.fresh_button.clicked.connect(self.clean)
         self.form.addWidget(self.button)
         self.form.addWidget(self.fresh_button)
